@@ -15,12 +15,17 @@
 <body>
   <main class="wrap">
 
+    <header class="hero" id="site-head">
+      <h1>Theorie oefenen</h1>
+      <p>Gratis oefenen voor het theorie-examen auto (B). Geen account, geen kosten, geen reclame.</p>
+      <nav class="tabs" aria-label="Onderdelen">
+        <a href="#oefenen" data-view="menu">Oefenen</a>
+        <a href="#leren" data-view="learn">Leren</a>
+      </nav>
+    </header>
+
     <!-- ===================================================== menu -->
     <section id="menu">
-      <header class="hero">
-        <h1>Theorie oefenen</h1>
-        <p>Gratis oefenen voor het theorie-examen auto (B). Geen account, geen kosten, geen reclame.</p>
-      </header>
 
       <div class="stats" aria-label="Je voortgang">
         <div><span class="stat-value" id="stat-seen">0</span><span class="stat-label">vragen geoefend</span></div>
@@ -73,6 +78,16 @@
       </details>
     </section>
 
+    <!-- ===================================================== leren -->
+    <section id="learn" class="hidden">
+      <label class="search">
+        <span class="visually-hidden">Zoek een regel</span>
+        <input type="search" id="learn-search" placeholder="Zoek een regel, bijv. tram of mistlicht" autocomplete="off">
+      </label>
+      <div class="chips" id="learn-chips" role="tablist" aria-label="Onderwerpen"></div>
+      <div id="learn-content"></div>
+    </section>
+
     <!-- ===================================================== quiz -->
     <section id="quiz" class="hidden">
       <div class="quiz-top">
@@ -123,6 +138,7 @@
 
   <script src="questions.js"></script>
   <script src="signs.js"></script>
+  <script src="learn.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

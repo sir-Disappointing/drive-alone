@@ -70,8 +70,27 @@
   }
 
   function show(id) {
-    ["menu", "quiz", "result"].forEach((s) => $(s).classList.toggle("hidden", s !== id));
+    ["menu", "learn", "quiz", "result"].forEach((s) => $(s).classList.toggle("hidden", s !== id));
+    $("site-head").classList.toggle("hidden", id === "quiz" || id === "result");
+    document.querySelectorAll(".tabs a").forEach((a) => {
+      const active = a.dataset.view === id;
+      a.classList.toggle("active", active);
+      if (active) a.setAttribute("aria-current", "page");
+      else a.removeAttribute("aria-current");
+    });
     window.scrollTo(0, 0);
+  }
+
+  // #leren toont het leergedeelte, al het andere het oefenmenu.
+  function route() {
+    if (!$("quiz").classList.contains("hidden")) return; // tijdens een quiz niet wegnavigeren
+    if (location.hash === "#leren") {
+      renderLearn();
+      show("learn");
+    } else {
+      renderMenu();
+      show("menu");
+    }
   }
 
   function el(tag, className, text) {
@@ -315,6 +334,130 @@
     });
   }
 
+  // ------------------------------------------------------------ leren
+
+  const learn = { chip: "all" };
+
+  function renderLearnChips() {
+    const chips = $("learn-chips");
+    chips.innerHTML = "";
+    const items = [["all", "Alles"], ["spiek", "Spiekbriefje"]].concat(LEARN.topics.map((t) => [t.topic, t.topic]));
+    items.forEach(([value, label]) => {
+      const b = el("button", "chip", label);
+      b.type = "button";
+      b.setAttribute("role", "tab");
+      b.setAttribute("aria-selected", String(learn.chip === value));
+      b.addEventListener("click", () => {
+        learn.chip = value;
+        $("learn-search").value = "";
+        renderLearn();
+      });
+      chips.appendChild(b);
+    });
+  }
+
+  function matches(query, ...texts) {
+    return !query || texts.some((t) => t && t.toLowerCase().includes(query));
+  }
+
+  function renderCheatsheet(query) {
+    const groups = LEARN.cheatsheet
+      .map((g) => ({ ...g, rows: g.rows.filter(([a, b]) => matches(query, g.title, a, b)) }))
+      .filter((g) => g.rows.length);
+    if (!groups.length) return null;
+
+    const card = el("section", "card learn-card");
+    card.appendChild(el("h2", null, "Spiekbriefje"));
+    card.appendChild(el("p", "muted small", "De getallen en regels die je op het examen moet kennen."));
+    const grid = el("div", "cheat-grid");
+    groups.forEach((g) => {
+      const box = el("div", "cheat-group");
+      box.appendChild(el("h3", null, g.title));
+      const dl = el("dl");
+      g.rows.forEach(([label, value]) => {
+        dl.append(el("dt", null, label), el("dd", null, value));
+      });
+      box.appendChild(dl);
+      grid.appendChild(box);
+    });
+    card.appendChild(grid);
+    return card;
+  }
+
+  function renderTopic(t, query) {
+    const rules = t.rules.filter((r) => matches(query, t.topic, r.title, r.text, r.warn));
+    const thumbs = (t.thumbs || []).filter((s) => matches(query, t.topic, s));
+    if (!rules.length && !thumbs.length) return null;
+
+    const card = el("section", "card learn-card");
+    card.appendChild(el("h2", null, t.topic));
+    if (t.intro && !query) card.appendChild(el("p", "muted", t.intro));
+
+    rules.forEach((r) => {
+      const rule = el("div", "rule");
+      if (r.sign && SIGNS[r.sign]) {
+        const s = el("div", "rule-sign");
+        s.innerHTML = SIGNS[r.sign];
+        rule.appendChild(s);
+      }
+      const body = el("div", "rule-body");
+      body.appendChild(el("h3", null, r.title));
+      body.appendChild(el("p", null, r.text));
+      if (r.warn) {
+        const w = el("p", "warn");
+        w.append(el("strong", null, "Let op: "), document.createTextNode(r.warn));
+        body.appendChild(w);
+      }
+      rule.appendChild(body);
+      card.appendChild(rule);
+    });
+
+    if (thumbs.length) {
+      const box = el("div", "thumbs");
+      box.appendChild(el("h3", null, "Vuistregels"));
+      const ul = el("ul");
+      thumbs.forEach((s) => ul.appendChild(el("li", null, s)));
+      box.appendChild(ul);
+      card.appendChild(box);
+    }
+
+    if (QUESTIONS.some((q) => q.topic === t.topic)) {
+      const b = el("button", "btn secondary", `Oefen ${t.topic.toLowerCase()} →`);
+      b.type = "button";
+      b.addEventListener("click", () => {
+        $("topic-select").value = t.topic;
+        $("count-select").value = "10";
+        start("practice");
+      });
+      card.appendChild(b);
+    }
+    return card;
+  }
+
+  function renderLearn() {
+    renderLearnChips();
+    const query = $("learn-search").value.trim().toLowerCase();
+    const content = $("learn-content");
+    content.innerHTML = "";
+
+    const parts = [];
+    // Bij zoeken doorzoek je alles, ongeacht het gekozen onderwerp.
+    const chip = query ? "all" : learn.chip;
+    if (chip === "all" || chip === "spiek") parts.push(renderCheatsheet(query));
+    if (chip !== "spiek") {
+      LEARN.topics
+        .filter((t) => chip === "all" || t.topic === chip)
+        .forEach((t) => parts.push(renderTopic(t, query)));
+    }
+
+    const found = parts.filter(Boolean);
+    if (!found.length) {
+      content.appendChild(el("p", "muted empty", `Niets gevonden voor "${$("learn-search").value.trim()}".`));
+      return;
+    }
+    found.forEach((p) => content.appendChild(p));
+  }
+
   // ------------------------------------------------------------ init
 
   function onKey(e) {
@@ -340,9 +483,11 @@
     $("only-wrong").addEventListener("change", renderReview);
     $("again").addEventListener("click", () => start(state.mode === "mistakes" && !mistakeIds().length ? "practice" : state.mode));
     $("to-menu").addEventListener("click", () => {
-      renderMenu();
-      show("menu");
+      history.replaceState(null, "", "#oefenen");
+      route();
     });
+    $("learn-search").addEventListener("input", renderLearn);
+    window.addEventListener("hashchange", route);
     $("reset").addEventListener("click", () => {
       if (!confirm("Al je opgeslagen voortgang wissen?")) return;
       saveStats({});
@@ -354,6 +499,7 @@
     });
     $("year").textContent = new Date().getFullYear();
     renderMenu();
+    route();
   }
 
   init();
