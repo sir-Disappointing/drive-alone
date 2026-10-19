@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Theorie Oefenen</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <h1>Theorie oefenen</h1>
+      <p class="sub">Gratis oefenvragen voor het theorie-examen.</p>
+    </header>
+
+    <section id="menu" class="card">
+      <h2>Kies een modus</h2>
+      <div class="modes">
+        <button class="btn" data-mode="practice">Oefenen<span>Direct feedback per vraag</span></button>
+        <button class="btn" data-mode="exam">Examen<span>Random vragen, uitslag aan het eind</span></button>
+      </div>
+      <label class="field">
+        Aantal vragen (examen)
+        <input type="number" id="count" min="1" value="10">
+      </label>
+      <p class="muted" id="bankInfo"></p>
+    </section>
+
+    <section id="quiz" class="card hidden">
+      <div class="progress"><div id="bar"></div></div>
+      <p class="meta"><span id="qnum"></span> · <span id="topic"></span></p>
+      <h2 id="question"></h2>
+      <div id="options" class="options"></div>
+      <div id="feedback" class="feedback hidden"></div>
+      <div class="actions">
+        <button class="btn ghost" id="quit">Stoppen</button>
+        <button class="btn" id="next" disabled>Volgende</button>
+      </div>
+    </section>
+
+    <section id="result" class="card hidden">
+      <h2>Resultaat</h2>
+      <p class="score" id="score"></p>
+      <div id="review"></div>
+      <button class="btn" id="again">Opnieuw</button>
+    </section>
+  </main>
+
+  <script src="questions.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
