@@ -4,49 +4,125 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Theorie Oefenen</title>
+  <meta name="description" content="Gratis oefenen voor het CBR theorie-examen auto (B). Examensimulatie met 50 vragen, oefenen per onderwerp en je fouten herhalen. Geen account, geen kosten.">
+  <meta name="theme-color" content="#1f4e9c">
+  <meta property="og:title" content="Theorie Oefenen">
+  <meta property="og:description" content="Gratis oefenen voor het theorie-examen auto. Geen account, geen kosten.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <main class="wrap">
-    <header>
-      <h1>Theorie oefenen</h1>
-      <p class="sub">Gratis oefenvragen voor het theorie-examen.</p>
-    </header>
 
-    <section id="menu" class="card">
-      <h2>Kies een modus</h2>
+    <!-- ===================================================== menu -->
+    <section id="menu">
+      <header class="hero">
+        <h1>Theorie oefenen</h1>
+        <p>Gratis oefenen voor het theorie-examen auto (B). Geen account, geen kosten, geen reclame.</p>
+      </header>
+
+      <div class="stats" aria-label="Je voortgang">
+        <div><span class="stat-value" id="stat-seen">0</span><span class="stat-label">vragen geoefend</span></div>
+        <div><span class="stat-value" id="stat-right">–</span><span class="stat-label">laatst goed</span></div>
+        <button class="link" id="reset" type="button">Voortgang wissen</button>
+      </div>
+
       <div class="modes">
-        <button class="btn" data-mode="practice">Oefenen<span>Direct feedback per vraag</span></button>
-        <button class="btn" data-mode="exam">Examen<span>Random vragen, uitslag aan het eind</span></button>
+        <article class="card mode">
+          <h2>Examen simuleren</h2>
+          <p class="muted" id="exam-desc"></p>
+          <p class="small">Net als het echte examen: geen uitleg tussendoor, de uitslag zie je aan het eind.</p>
+          <button class="btn" id="start-exam" type="button">Start examen</button>
+        </article>
+
+        <article class="card mode">
+          <h2>Oefenen</h2>
+          <p class="muted">Direct zien of je antwoord goed is, met uitleg.</p>
+          <div class="fields">
+            <label class="field">
+              Onderwerp
+              <select id="topic-select"></select>
+            </label>
+            <label class="field">
+              Aantal
+              <select id="count-select">
+                <option value="10">10 vragen</option>
+                <option value="20">20 vragen</option>
+                <option value="all">Alle</option>
+              </select>
+            </label>
+          </div>
+          <button class="btn" id="start-practice" type="button">Start oefenen</button>
+        </article>
+
+        <article class="card mode">
+          <h2>Fouten herhalen</h2>
+          <p class="muted" id="mistakes-count"></p>
+          <p class="small">Vragen die je de laatste keer fout had. Beantwoord je ze goed, dan verdwijnen ze uit deze lijst.</p>
+          <button class="btn" id="start-mistakes" type="button">Herhaal fouten</button>
+        </article>
       </div>
-      <label class="field">
-        Aantal vragen (examen)
-        <input type="number" id="count" min="1" value="10">
-      </label>
-      <p class="muted" id="bankInfo"></p>
+
+      <details class="card about">
+        <summary>Over deze site</summary>
+        <p>Dit is een gratis oefensite. De vragen zijn zelf geschreven op basis van de Nederlandse verkeersregels (RVV 1990). Het zijn <strong>niet</strong> de officiële CBR-vragen, en deze site is niet verbonden aan het CBR.</p>
+        <p>Het echte examen bestaat sinds april 2025 uit 50 vragen in 30 minuten. Je bent geslaagd met minimaal 44 goede antwoorden. Gevaarherkenning gaat daar met korte animaties; hier zijn dat tekstvragen met de keuze remmen, gas loslaten of niets.</p>
+        <p>We doen ons best om alles juist te houden, maar regels veranderen. Twijfel je? Kijk dan op <a href="https://www.cbr.nl" rel="noopener">cbr.nl</a> of in het <a href="https://wetten.overheid.nl/BWBR0004825/" rel="noopener">RVV 1990</a>.</p>
+        <p>Je voortgang wordt alleen in je eigen browser bewaard.</p>
+      </details>
     </section>
 
-    <section id="quiz" class="card hidden">
-      <div class="progress"><div id="bar"></div></div>
-      <p class="meta"><span id="qnum"></span> · <span id="topic"></span></p>
-      <h2 id="question"></h2>
-      <div id="options" class="options"></div>
-      <div id="feedback" class="feedback hidden"></div>
-      <div class="actions">
-        <button class="btn ghost" id="quit">Stoppen</button>
-        <button class="btn" id="next" disabled>Volgende</button>
+    <!-- ===================================================== quiz -->
+    <section id="quiz" class="hidden">
+      <div class="quiz-top">
+        <button class="link" id="quit" type="button">← Stoppen</button>
+        <span class="timer hidden" id="timer" role="timer" aria-label="Resterende tijd"></span>
+      </div>
+      <div class="progress" aria-hidden="true"><div id="bar"></div></div>
+
+      <div class="card">
+        <p class="meta"><span id="qnum"></span> · <span id="topic"></span></p>
+        <div id="sign" class="sign hidden"></div>
+        <h2 id="question" tabindex="-1"></h2>
+        <div id="options" class="options"></div>
+        <div id="feedback" class="feedback hidden" aria-live="polite"></div>
+        <div class="actions">
+          <span class="small muted hint">Toets 1–4 of A–D, Enter voor volgende</span>
+          <button class="btn" id="next" type="button" disabled>Volgende</button>
+        </div>
       </div>
     </section>
 
-    <section id="result" class="card hidden">
-      <h2>Resultaat</h2>
-      <p class="score" id="score"></p>
-      <div id="review"></div>
-      <button class="btn" id="again">Opnieuw</button>
+    <!-- ===================================================== resultaat -->
+    <section id="result" class="hidden">
+      <div class="card result-head">
+        <p id="verdict" class="verdict"></p>
+        <p class="score" id="score"></p>
+        <p class="muted" id="score-detail"></p>
+        <p class="small" id="result-note"></p>
+        <div class="result-actions">
+          <button class="btn" id="again" type="button">Opnieuw</button>
+          <button class="btn secondary" id="to-menu" type="button">Naar menu</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="review-head">
+          <h2>Nakijken</h2>
+          <label class="toggle"><input type="checkbox" id="only-wrong"> Alleen fouten</label>
+        </div>
+        <div id="review"></div>
+      </div>
     </section>
+
+    <footer>
+      <p>Niet verbonden aan het CBR. Eigen oefenvragen, gratis te gebruiken. © <span id="year"></span></p>
+    </footer>
   </main>
 
   <script src="questions.js"></script>
+  <script src="signs.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
