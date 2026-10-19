@@ -27,6 +27,14 @@ const SIGNS = (function () {
        <polygon points="50,20 80,50 50,80 20,50" fill="${ORANGE}"/>`,
       "Voorrangsweg"
     ),
+    "einde-voorrangsweg": svg(
+      `<polygon points="50,2 98,50 50,98 2,50" fill="#fff" stroke="#333" stroke-width="2"/>
+       <polygon points="50,20 80,50 50,80 20,50" fill="${ORANGE}"/>
+       <line x1="30" y1="70" x2="70" y2="30" stroke="#222" stroke-width="5"/>
+       <line x1="24" y1="62" x2="62" y2="24" stroke="#222" stroke-width="3"/>
+       <line x1="38" y1="76" x2="76" y2="38" stroke="#222" stroke-width="3"/>`,
+      "Einde voorrangsweg"
+    ),
     inrijverbod: svg(
       `<circle cx="50" cy="50" r="46" fill="${RED}"/>
        <rect x="18" y="42" width="64" height="16" fill="#fff"/>`,

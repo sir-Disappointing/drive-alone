@@ -4,48 +4,68 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Theorie Oefenen</title>
-  <meta name="description" content="Gratis oefenen voor het CBR theorie-examen auto (B). Examensimulatie met 50 vragen, oefenen per onderwerp en je fouten herhalen. Geen account, geen kosten.">
-  <meta name="theme-color" content="#1f4e9c">
+  <meta name="description" content="Gratis oefenen voor het CBR theorie-examen auto (B). Examensimulatie met 50 vragen, oefenen per onderwerp, je fouten herhalen en alle regels op een rij. Geen account, geen kosten.">
+  <meta name="theme-color" content="#1A4FA0">
   <meta property="og:title" content="Theorie Oefenen">
   <meta property="og:description" content="Gratis oefenen voor het theorie-examen auto. Geen account, geen kosten.">
   <meta property="og:type" content="website">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="fonts/overpass-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="wrap">
+  <header class="topbar" id="site-head">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="#oefenen">
+        <svg width="32" height="32" viewBox="0 0 100 100" aria-hidden="true"><polygon points="50,3 97,50 50,97 3,50" fill="#fff"/><polygon points="50,22 78,50 50,78 22,50" fill="#F2A900"/></svg>
+        <span>Theorie oefenen</span>
+      </a>
+      <nav class="tabs" aria-label="Onderdelen">
+        <a href="#oefenen" data-view="menu">Oefenen</a>
+        <a href="#leren" data-view="learn">Leren</a>
+      </nav>
+    </div>
+  </header>
 
+  <main>
     <!-- ===================================================== menu -->
-    <section id="menu">
-      <header class="hero">
-        <h1>Theorie oefenen</h1>
-        <p>Gratis oefenen voor het theorie-examen auto (B). Geen account, geen kosten, geen reclame.</p>
-      </header>
+    <section id="menu" class="wrap page">
+      <div class="hero-row">
+        <div class="hero">
+          <p class="eyebrow">Theorie-examen auto (B)</p>
+          <h1>Haal je theorie.<br>Gratis.</h1>
+          <p class="lead">Oefen per onderwerp, simuleer het echte examen en leer de regels die er echt toe doen. Geen account, geen kosten.</p>
+        </div>
 
-      <div class="stats" aria-label="Je voortgang">
-        <div><span class="stat-value" id="stat-seen">0</span><span class="stat-label">vragen geoefend</span></div>
-        <div><span class="stat-value" id="stat-right">–</span><span class="stat-label">laatst goed</span></div>
-        <button class="link" id="reset" type="button">Voortgang wissen</button>
+        <aside class="card progress-card" aria-labelledby="progress-title">
+          <div class="progress-head">
+            <h2 id="progress-title">Jouw voortgang</h2>
+            <button class="link" id="reset" type="button">Wissen</button>
+          </div>
+          <div class="big-stats">
+            <div><span class="big-num" id="stat-seen">0</span><span class="big-label">vragen geoefend</span></div>
+            <div><span class="big-num" id="stat-right">–</span><span class="big-label">laatst goed</span></div>
+          </div>
+          <div id="topic-progress" class="topic-bars"></div>
+        </aside>
       </div>
 
       <div class="modes">
-        <article class="card mode">
+        <article class="mode mode-primary">
+          <svg class="mode-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5"/><path d="M9 2h6"/></svg>
           <h2>Examen simuleren</h2>
-          <p class="muted" id="exam-desc"></p>
-          <p class="small">Net als het echte examen: geen uitleg tussendoor, de uitslag zie je aan het eind.</p>
-          <button class="btn" id="start-exam" type="button">Start examen</button>
+          <p>Net als het echte examen. Uitslag pas aan het eind.</p>
+          <div class="pills" id="exam-pills"></div>
+          <button class="btn btn-amber" id="start-exam" type="button">Start examen</button>
         </article>
 
-        <article class="card mode">
+        <article class="mode">
+          <svg class="mode-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H8l-4 4z"/><path d="M9 10h6"/></svg>
           <h2>Oefenen</h2>
-          <p class="muted">Direct zien of je antwoord goed is, met uitleg.</p>
+          <p>Direct zien of je antwoord goed is, met uitleg.</p>
           <div class="fields">
-            <label class="field">
-              Onderwerp
-              <select id="topic-select"></select>
-            </label>
-            <label class="field">
-              Aantal
+            <label class="field">Onderwerp <select id="topic-select"></select></label>
+            <label class="field">Aantal
               <select id="count-select">
                 <option value="10">10 vragen</option>
                 <option value="20">20 vragen</option>
@@ -56,13 +76,23 @@
           <button class="btn" id="start-practice" type="button">Start oefenen</button>
         </article>
 
-        <article class="card mode">
+        <article class="mode">
+          <svg class="mode-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
           <h2>Fouten herhalen</h2>
-          <p class="muted" id="mistakes-count"></p>
-          <p class="small">Vragen die je de laatste keer fout had. Beantwoord je ze goed, dan verdwijnen ze uit deze lijst.</p>
-          <button class="btn" id="start-mistakes" type="button">Herhaal fouten</button>
+          <p>Vragen die je de laatste keer fout had. Goed beantwoord? Dan verdwijnen ze.</p>
+          <p class="mistakes-count" id="mistakes-count"></p>
+          <button class="btn btn-soft" id="start-mistakes" type="button">Herhaal fouten</button>
         </article>
       </div>
+
+      <section class="cheat-strip" aria-labelledby="strip-title">
+        <div class="cheat-strip-text">
+          <h2 id="strip-title">Spiekbriefje</h2>
+          <p>De getallen die je op het examen moet kennen.</p>
+        </div>
+        <div class="facts" id="facts"></div>
+        <a class="strip-link" href="#leren">Naar Leren →</a>
+      </section>
 
       <details class="card about">
         <summary>Over deze site</summary>
@@ -73,37 +103,68 @@
       </details>
     </section>
 
+    <!-- ===================================================== leren -->
+    <section id="learn" class="wrap page hidden">
+      <h1 class="page-title">Leren</h1>
+      <p class="lead">De regels, de getallen en de vuistregels. Kort en zonder omhaal.</p>
+      <label class="search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="visually-hidden">Zoek een regel</span>
+        <input type="search" id="learn-search" placeholder="Zoek een regel, bijv. tram of mistlicht" autocomplete="off">
+      </label>
+      <div class="chips" id="learn-chips" role="tablist" aria-label="Onderwerpen"></div>
+      <div id="learn-content"></div>
+    </section>
+
     <!-- ===================================================== quiz -->
     <section id="quiz" class="hidden">
-      <div class="quiz-top">
-        <button class="link" id="quit" type="button">← Stoppen</button>
-        <span class="timer hidden" id="timer" role="timer" aria-label="Resterende tijd"></span>
-      </div>
-      <div class="progress" aria-hidden="true"><div id="bar"></div></div>
-
-      <div class="card">
-        <p class="meta"><span id="qnum"></span> · <span id="topic"></span></p>
-        <div id="sign" class="sign hidden"></div>
-        <h2 id="question" tabindex="-1"></h2>
-        <div id="options" class="options"></div>
-        <div id="feedback" class="feedback hidden" aria-live="polite"></div>
-        <div class="actions">
-          <span class="small muted hint">Toets 1–4 of A–D, Enter voor volgende</span>
-          <button class="btn" id="next" type="button" disabled>Volgende</button>
+      <div class="quizbar">
+        <div class="wrap narrow quizbar-inner">
+          <button class="back" id="quit" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+            Stoppen
+          </button>
+          <span class="counter" id="qnum"></span>
+          <span class="mode-pill" id="mode-pill"></span>
+          <span class="mode-pill timer hidden" id="timer" role="timer" aria-label="Resterende tijd"></span>
         </div>
+        <div class="wrap narrow">
+          <div class="steps" id="steps" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <div class="wrap narrow page">
+        <article class="card question-card">
+          <div class="question-head">
+            <div id="sign" class="sign-tile hidden"></div>
+            <div class="question-text">
+              <p class="eyebrow" id="topic"></p>
+              <h1 id="question" tabindex="-1"></h1>
+            </div>
+          </div>
+          <div id="options" class="options"></div>
+          <div id="feedback" class="feedback hidden" aria-live="polite"></div>
+          <div class="actions">
+            <span class="hint">Toets <kbd>1</kbd>–<kbd>4</kbd> om te kiezen, <kbd>Enter</kbd> voor volgende</span>
+            <div class="nav-buttons">
+              <button class="btn btn-soft hidden" id="prev" type="button">Vorige</button>
+              <button class="btn" id="next" type="button" disabled>Volgende</button>
+            </div>
+          </div>
+        </article>
       </div>
     </section>
 
     <!-- ===================================================== resultaat -->
-    <section id="result" class="hidden">
+    <section id="result" class="wrap narrow page hidden">
       <div class="card result-head">
         <p id="verdict" class="verdict"></p>
         <p class="score" id="score"></p>
-        <p class="muted" id="score-detail"></p>
-        <p class="small" id="result-note"></p>
+        <p class="score-detail" id="score-detail"></p>
+        <p class="result-note" id="result-note"></p>
         <div class="result-actions">
           <button class="btn" id="again" type="button">Opnieuw</button>
-          <button class="btn secondary" id="to-menu" type="button">Naar menu</button>
+          <button class="btn btn-soft" id="to-menu" type="button">Naar menu</button>
         </div>
       </div>
 
@@ -115,14 +176,15 @@
         <div id="review"></div>
       </div>
     </section>
-
-    <footer>
-      <p>Niet verbonden aan het CBR. Eigen oefenvragen, gratis te gebruiken. © <span id="year"></span></p>
-    </footer>
   </main>
+
+  <footer class="wrap">
+    <p>Niet verbonden aan het CBR. Eigen oefenvragen, gratis te gebruiken. © <span id="year"></span></p>
+  </footer>
 
   <script src="questions.js"></script>
   <script src="signs.js"></script>
+  <script src="learn.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
