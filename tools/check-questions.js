@@ -6,10 +6,11 @@ const vm = require("vm");
 const root = path.join(__dirname, "..");
 const ctx = {};
 vm.createContext(ctx);
-for (const file of ["questions.js", "signs.js"]) {
+for (const file of ["questions.js", "signs-data.js", "signs.js", "sign-notes.js"]) {
   vm.runInContext(fs.readFileSync(path.join(root, file), "utf8"), ctx, { filename: file });
 }
-const { QUESTIONS, SIGNS } = vm.runInContext("({ QUESTIONS, SIGNS })", ctx);
+const { QUESTIONS, SIGNS, SIGN_DATA, SIGN_NOTES } = vm.runInContext("({ QUESTIONS, SIGNS, SIGN_DATA, SIGN_NOTES })", ctx);
+const signCodes = new Set(SIGN_DATA.map((s) => s.code));
 
 const problems = [];
 const ids = new Set();
@@ -29,7 +30,15 @@ for (const q of QUESTIONS) {
       problems.push(`${where}: answer verwijst niet naar een bestaand antwoord`);
     }
   }
-  if (q.sign && !SIGNS[q.sign]) problems.push(`${where}: onbekend bord "${q.sign}"`);
+  if (q.sign && !signCodes.has(q.sign) && !SIGNS[q.sign]) problems.push(`${where}: onbekend bord "${q.sign}"`);
+}
+
+// Uitleg bij borden: alleen bestaande codes, en verwijzingen naar bestaande borden.
+for (const [code, note] of Object.entries(SIGN_NOTES)) {
+  if (!signCodes.has(code)) problems.push(`bordnotitie ${code}: bord bestaat niet`);
+  for (const c of note.confuse || []) {
+    if (!signCodes.has(c.code)) problems.push(`bordnotitie ${code}: verwijst naar onbekend bord ${c.code}`);
+  }
 }
 
 const topics = {};

@@ -88,7 +88,7 @@
   }
 
   function show(id) {
-    ["menu", "learn", "quiz", "result"].forEach((s) => $(s).classList.toggle("hidden", s !== id));
+    ["menu", "learn", "signs", "quiz", "result"].forEach((s) => $(s).classList.toggle("hidden", s !== id));
     $("site-head").classList.toggle("hidden", id === "quiz" || id === "result");
     document.querySelectorAll(".tabs a").forEach((a) => {
       const active = a.dataset.view === id;
@@ -99,13 +99,23 @@
     window.scrollTo(0, 0);
   }
 
-  // #leren toont het leergedeelte, al het andere het oefenmenu.
+  // #leren toont het leergedeelte, #borden (of #borden/B6) de borden, al het andere het oefenmenu.
   function route() {
     if (!$("quiz").classList.contains("hidden")) return; // tijdens een quiz niet wegnavigeren
-    if (location.hash === "#leren") {
+    const [page, code] = location.hash.slice(1).split("/");
+    if (page === "leren") {
+      closeSign();
       renderLearn();
       show("learn");
+    } else if (page === "borden") {
+      if ($("signs").classList.contains("hidden")) {
+        renderSigns();
+        show("signs");
+      }
+      if (code) openSign(decodeURIComponent(code));
+      else closeSign();
     } else {
+      closeSign();
       renderMenu();
       show("menu");
     }
@@ -265,7 +275,7 @@
     $("topic").textContent = q.topic;
 
     const sign = $("sign");
-    sign.innerHTML = q.sign && SIGNS[q.sign] ? SIGNS[q.sign] : "";
+    sign.innerHTML = q.sign ? signMarkup(q.sign) : "";
     sign.classList.toggle("hidden", !sign.innerHTML);
 
     $("question").textContent = q.question;
@@ -511,9 +521,9 @@
       const grid = el("div", "rules");
       rules.forEach((r) => {
         const rule = el("div", "rule");
-        if (r.sign && SIGNS[r.sign]) {
+        if (r.sign) {
           const s = el("div", "rule-sign");
-          s.innerHTML = SIGNS[r.sign];
+          s.innerHTML = signMarkup(r.sign);
           rule.appendChild(s);
         }
         const body = el("div");
@@ -565,6 +575,168 @@
     found.forEach((p) => content.appendChild(p));
   }
 
+  // ------------------------------------------------------------ borden
+
+  const signsView = { series: "all" };
+  const noteFor = (code) => SIGN_NOTES[code] || null;
+  const seriesOf = (code) => code.match(/^[A-Z]/)[0];
+  const signByCode = (code) => SIGN_DATA.find((s) => s.code === code);
+
+  function visibleSigns() {
+    const query = $("sign-search").value.trim().toLowerCase();
+    const examOnly = $("sign-exam-only").checked;
+    return SIGN_DATA.filter((s) => {
+      const note = noteFor(s.code);
+      if (examOnly && !(note && note.exam)) return false;
+      if (query) {
+        const text = [s.code, s.name, note && note.short, note && note.meaning].join(" ").toLowerCase();
+        return text.includes(query);
+      }
+      return signsView.series === "all" || seriesOf(s.code) === signsView.series;
+    });
+  }
+
+  function renderSignChips() {
+    const chips = $("sign-chips");
+    chips.innerHTML = "";
+    [["all", "Alle"]].concat(Object.entries(SIGN_SERIES).map(([k, v]) => [k, v.name])).forEach(([value, label]) => {
+      const b = el("button", "chip");
+      if (value !== "all") b.appendChild(el("span", "series-code", value));
+      b.appendChild(document.createTextNode(label));
+      b.type = "button";
+      b.setAttribute("role", "tab");
+      b.setAttribute("aria-selected", String(signsView.series === value));
+      b.addEventListener("click", () => {
+        signsView.series = value;
+        $("sign-search").value = "";
+        renderSigns();
+      });
+      chips.appendChild(b);
+    });
+  }
+
+  function signCard(s) {
+    const note = noteFor(s.code);
+    const card = el("a", "sign-card");
+    card.href = `#borden/${encodeURIComponent(s.code)}`;
+    const img = el("div", "sign-card-img");
+    img.innerHTML = signMarkup(s.code);
+    card.appendChild(img);
+    const label = el("div", "sign-card-label");
+    label.appendChild(el("span", "sign-code", s.code));
+    if (note && note.exam) {
+      const dot = el("span", "exam-dot");
+      dot.title = "Examenbelangrijk";
+      label.appendChild(dot);
+    }
+    card.appendChild(label);
+    card.appendChild(el("span", "sign-card-name", note ? note.short : s.name));
+    return card;
+  }
+
+  function renderSigns() {
+    renderSignChips();
+    const list = $("sign-list");
+    list.innerHTML = "";
+    const signs = visibleSigns();
+    if (!signs.length) {
+      list.appendChild(el("p", "empty", "Geen borden gevonden."));
+      return;
+    }
+    const searching = $("sign-search").value.trim() !== "";
+    const groups = {};
+    signs.forEach((s) => (groups[seriesOf(s.code)] = groups[seriesOf(s.code)] || []).push(s));
+    Object.keys(SIGN_SERIES)
+      .filter((k) => groups[k])
+      .forEach((k) => {
+        const section = el("section", "sign-group");
+        const head = el("div", "sign-group-head");
+        const h2 = el("h2");
+        h2.append(el("span", "series-code", k), document.createTextNode(SIGN_SERIES[k].name));
+        head.append(h2, el("span", "sign-count", `${groups[k].length}`));
+        section.appendChild(head);
+        if (!searching) section.appendChild(el("p", "sign-group-intro", SIGN_SERIES[k].intro));
+        const grid = el("div", "sign-grid");
+        groups[k].forEach((s) => grid.appendChild(signCard(s)));
+        section.appendChild(grid);
+        list.appendChild(section);
+      });
+  }
+
+  function openSign(code) {
+    const s = signByCode(code);
+    if (!s) return;
+    const note = noteFor(code);
+    const series = SIGN_SERIES[seriesOf(code)];
+
+    $("sd-series").innerHTML = "";
+    $("sd-series").append(el("span", "series-code", seriesOf(code)), document.createTextNode(series.name));
+    $("sd-image").innerHTML = signMarkup(code);
+    $("sd-code").textContent = `Bord ${code}${note && note.exam ? " – examenbelangrijk" : ""}`;
+    $("sd-title").textContent = note ? note.short : s.name;
+    $("sd-official").textContent = note ? `Officieel: ${s.name}` : "";
+    $("sd-meaning").textContent = note ? note.meaning : "Voor dit bord hebben we nog geen extra uitleg. De officiële omschrijving staat hierboven.";
+
+    const tips = $("sd-tips");
+    tips.innerHTML = "";
+    if (note && note.tips && note.tips.length) {
+      const box = el("div", "sd-box sd-warn");
+      const h = el("h3");
+      h.innerHTML = ICON_WARN;
+      h.appendChild(el("span", null, "Let op"));
+      const ul = el("ul");
+      note.tips.forEach((t) => ul.appendChild(el("li", null, t)));
+      box.append(h, ul);
+      tips.appendChild(box);
+    }
+
+    const confuse = $("sd-confuse");
+    confuse.innerHTML = "";
+    if (note && note.confuse && note.confuse.length) {
+      const box = el("div", "sd-box");
+      box.appendChild(el("h3", null, "Niet verwarren met"));
+      note.confuse.forEach((c) => {
+        const other = signByCode(c.code);
+        const a = el("a", "confuse-item");
+        a.href = `#borden/${encodeURIComponent(c.code)}`;
+        const img = el("div", "confuse-img");
+        img.innerHTML = signMarkup(c.code);
+        const text = el("div");
+        const name = el("strong");
+        name.append(el("span", "series-code", c.code), document.createTextNode(noteFor(c.code) ? noteFor(c.code).short : other.name));
+        text.append(name, el("p", null, c.diff));
+        a.append(img, text);
+        box.appendChild(a);
+      });
+      confuse.appendChild(box);
+    }
+
+    const credit = s.credit
+      ? `Afbeelding: ${s.credit.author}, ${s.credit.license} (Wikimedia Commons).`
+      : "Afbeelding: RVV 1990 bijlage 1, via Wikimedia Commons (publiek domein).";
+    $("sd-credit").textContent = credit;
+
+    const dialog = $("sign-dialog");
+    dialog.dataset.code = code;
+    if (!dialog.open) dialog.showModal();
+    dialog.scrollTop = 0;
+    $("sd-title").focus({ preventScroll: true });
+  }
+
+  function closeSign() {
+    const dialog = $("sign-dialog");
+    if (dialog.open) dialog.close();
+  }
+
+  function stepSign(dir) {
+    const list = visibleSigns();
+    const i = list.findIndex((s) => s.code === $("sign-dialog").dataset.code);
+    const next = list[(i + dir + list.length) % list.length];
+    if (!next) return;
+    history.replaceState(null, "", `#borden/${encodeURIComponent(next.code)}`);
+    openSign(next.code);
+  }
+
   // ------------------------------------------------------------ init
 
   function onKey(e) {
@@ -605,6 +777,23 @@
       renderMenu();
     });
     $("learn-search").addEventListener("input", renderLearn);
+    $("sign-search").addEventListener("input", renderSigns);
+    $("sign-exam-only").addEventListener("change", renderSigns);
+    $("sd-close").addEventListener("click", closeSign);
+    $("sd-prev").addEventListener("click", () => stepSign(-1));
+    $("sd-next").addEventListener("click", () => stepSign(1));
+    const dialog = $("sign-dialog");
+    // Esc of klikken naast het venster sluit het; de URL gaat terug naar #borden.
+    dialog.addEventListener("close", () => {
+      if (location.hash.startsWith("#borden/")) history.replaceState(null, "", "#borden");
+    });
+    dialog.addEventListener("click", (e) => {
+      if (e.target === dialog) dialog.close();
+    });
+    dialog.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") stepSign(-1);
+      if (e.key === "ArrowRight") stepSign(1);
+    });
     window.addEventListener("hashchange", route);
     document.addEventListener("keydown", onKey);
     window.addEventListener("beforeunload", (e) => {
