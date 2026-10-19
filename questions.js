@@ -59,7 +59,7 @@ const QUESTIONS = [
   {
     id: 6,
     topic: "Voorrang",
-    sign: "stop",
+    sign: "B7",
     question: "Je nadert dit bord. Er komt geen verkeer aan. Wat moet je doen?",
     options: ["Langzaam doorrijden", "Volledig stoppen en daarna voorrang verlenen", "Alleen stoppen als er verkeer aankomt"],
     answer: 1,
@@ -68,7 +68,7 @@ const QUESTIONS = [
   {
     id: 7,
     topic: "Voorrang",
-    sign: "voorrangsweg",
+    sign: "B1",
     question: "Wat betekent dit bord?",
     options: ["Einde voorrangsweg", "Je rijdt op een voorrangsweg", "Voorrang verlenen"],
     answer: 1,
@@ -77,7 +77,7 @@ const QUESTIONS = [
   {
     id: 8,
     topic: "Voorrang",
-    sign: "voorrang-verlenen",
+    sign: "B6",
     question: "Wat betekent dit bord?",
     options: ["Stoppen verplicht", "Voorrang verlenen aan het verkeer op de kruisende weg", "Je hebt voorrang op het volgende kruispunt"],
     answer: 1,
@@ -194,7 +194,7 @@ const QUESTIONS = [
   {
     id: 22,
     topic: "Verkeerstekens",
-    sign: "inrijverbod",
+    sign: "C2",
     question: "Wat betekent dit bord?",
     options: ["Gesloten voor alle voertuigen in beide richtingen", "Verboden in te rijden", "Stopverbod"],
     answer: 1,
@@ -203,7 +203,7 @@ const QUESTIONS = [
   {
     id: 23,
     topic: "Verkeerstekens",
-    sign: "gesloten",
+    sign: "C1",
     question: "Wat betekent dit bord?",
     options: ["Gesloten voor alle voertuigen in beide richtingen", "Einde van alle verboden", "Parkeerverbod"],
     answer: 0,
@@ -212,7 +212,7 @@ const QUESTIONS = [
   {
     id: 24,
     topic: "Verkeerstekens",
-    sign: "parkeerverbod",
+    sign: "E1",
     question: "Wat betekent dit bord?",
     options: ["Stopverbod", "Parkeerverbod", "Verboden in te rijden"],
     answer: 1,
@@ -221,7 +221,7 @@ const QUESTIONS = [
   {
     id: 25,
     topic: "Verkeerstekens",
-    sign: "stopverbod",
+    sign: "E2",
     question: "Wat betekent dit bord?",
     options: ["Parkeerverbod", "Stopverbod", "Einde parkeerverbod"],
     answer: 1,
@@ -230,7 +230,7 @@ const QUESTIONS = [
   {
     id: 26,
     topic: "Verkeerstekens",
-    sign: "eenrichting",
+    sign: "C3",
     question: "Wat betekent dit bord?",
     options: ["Verplichte rijrichting voor fietsers", "Eenrichtingsweg", "Hier rechtsaf slaan"],
     answer: 1,
@@ -323,11 +323,11 @@ const QUESTIONS = [
   {
     id: 37,
     topic: "Snelheid",
-    sign: "max-30",
-    question: "Je rijdt 40 km/u en passeert dit bord. Wat doe je?",
-    options: ["Snelheid aanhouden", "Snelheid verlagen tot maximaal 30 km/u", "Versnellen tot 50 km/u"],
+    sign: "A1",
+    question: "Je rijdt 70 km/u en passeert dit bord. Wat doe je?",
+    options: ["Snelheid aanhouden", "Snelheid verlagen tot maximaal 50 km/u", "Snelheid verlagen tot precies 50 km/u, niet lager"],
     answer: 1,
-    explanation: "Dit bord geeft een maximumsnelheid van 30 km/u aan."
+    explanation: "Dit bord geeft een maximumsnelheid van 50 km/u aan. Het is een maximum: langzamer mag, en moet als de omstandigheden daarom vragen."
   },
   {
     id: 38,
@@ -767,7 +767,7 @@ const QUESTIONS = [
   {
     id: 87,
     topic: "Voorrang",
-    sign: "einde-voorrangsweg",
+    sign: "B2",
     question: "Je passeert dit bord. Betekent dit dat je op het volgende kruispunt voorrang moet verlenen?",
     options: ["Ja, altijd", "Nee, je kijkt op het volgende kruispunt opnieuw welke regel geldt"],
     answer: 1,
@@ -1004,7 +1004,7 @@ const QUESTIONS = [
   {
     id: 113,
     topic: "Stilstaan en parkeren",
-    sign: "parkeerverbod",
+    sign: "E1",
     question: "Je zet de auto hier neer en wacht 10 minuten in de auto op een vriend. Is dat parkeren?",
     options: ["Nee, want je zit in de auto", "Ja, want het duurt langer dan direct in- of uitstappen"],
     answer: 1,

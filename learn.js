@@ -108,18 +108,18 @@ const LEARN = {
         },
         {
           title: "Voorrangsweg",
-          sign: "voorrangsweg",
+          sign: "B1",
           text: "Op een voorrangsweg moet het verkeer van zijwegen jou voorrang verlenen.",
         },
         {
           title: "Einde voorrangsweg",
-          sign: "einde-voorrangsweg",
+          sign: "B2",
           text: "De voorrangsweg houdt op. Op het volgende kruispunt kijk je opnieuw welke regel geldt.",
           warn: "Dit bord betekent niet automatisch dat jij voorrang moet verlenen.",
         },
         {
           title: "Voorrang verlenen of stoppen",
-          sign: "voorrang-verlenen",
+          sign: "B6",
           text: "Bij de driehoek en bij haaientanden verleen je voorrang; stoppen hoeft alleen als het nodig is. Bij een stopbord stop je altijd helemaal, ook als er niemand komt.",
         },
         {
@@ -185,12 +185,12 @@ const LEARN = {
         },
         {
           title: "Parkeerverbod en stopverbod",
-          sign: "stopverbod",
+          sign: "E2",
           text: "Eén schuine streep: niet parkeren, kort stilstaan mag. Een kruis: niet stilstaan, ook niet even.",
         },
         {
           title: "Gesloten en inrijverbod",
-          sign: "inrijverbod",
+          sign: "C2",
           text: "Een rode schijf met een witte balk: je mag hier niet inrijden. Een witte schijf met rode rand: gesloten voor voertuigen in beide richtingen.",
         },
         {

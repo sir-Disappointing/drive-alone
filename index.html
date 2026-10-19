@@ -23,6 +23,7 @@
       <nav class="tabs" aria-label="Onderdelen">
         <a href="#oefenen" data-view="menu">Oefenen</a>
         <a href="#leren" data-view="learn">Leren</a>
+        <a href="#borden" data-view="signs">Borden</a>
       </nav>
     </div>
   </header>
@@ -116,6 +117,48 @@
       <div id="learn-content"></div>
     </section>
 
+    <!-- ===================================================== borden -->
+    <section id="signs" class="wrap page hidden">
+      <h1 class="page-title">Verkeersborden</h1>
+      <p class="lead">Alle borden uit het RVV 1990. Bij de borden die vaak op het examen terugkomen, staat uitleg en waar je ze mee kunt verwarren.</p>
+      <div class="sign-tools">
+        <label class="search">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <span class="visually-hidden">Zoek een bord</span>
+          <input type="search" id="sign-search" placeholder="Zoek op naam of code, bijv. inhaalverbod of B6" autocomplete="off">
+        </label>
+        <label class="switch">
+          <input type="checkbox" id="sign-exam-only">
+          <span>Alleen examenbelangrijk</span>
+        </label>
+      </div>
+      <div class="chips" id="sign-chips" role="tablist" aria-label="Series"></div>
+      <div id="sign-list"></div>
+    </section>
+
+    <dialog id="sign-dialog" class="sign-dialog" aria-labelledby="sd-title">
+      <div class="sd-top">
+        <span class="sd-series" id="sd-series"></span>
+        <div class="sd-nav">
+          <button class="icon-btn" id="sd-prev" type="button" aria-label="Vorig bord"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+          <button class="icon-btn" id="sd-next" type="button" aria-label="Volgend bord"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+          <button class="icon-btn" id="sd-close" type="button" aria-label="Sluiten"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+        </div>
+      </div>
+      <div class="sd-body">
+        <div class="sd-image" id="sd-image"></div>
+        <div class="sd-text">
+          <p class="eyebrow" id="sd-code"></p>
+          <h2 id="sd-title" tabindex="-1"></h2>
+          <p class="sd-official" id="sd-official"></p>
+          <p class="sd-meaning" id="sd-meaning"></p>
+        </div>
+      </div>
+      <div id="sd-tips"></div>
+      <div id="sd-confuse"></div>
+      <p class="sd-credit" id="sd-credit"></p>
+    </dialog>
+
     <!-- ===================================================== quiz -->
     <section id="quiz" class="hidden">
       <div class="quizbar">
@@ -183,6 +226,8 @@
   </footer>
 
   <script src="questions.js"></script>
+  <script src="signs-data.js"></script>
+  <script src="sign-notes.js"></script>
   <script src="signs.js"></script>
   <script src="learn.js"></script>
   <script src="app.js"></script>
