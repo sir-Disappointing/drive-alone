@@ -99,6 +99,8 @@
   function show(id) {
     ["menu", "learn", "signs", "quiz", "result"].forEach((s) => $(s).classList.toggle("hidden", s !== id));
     $("site-head").classList.toggle("hidden", id === "quiz" || id === "result");
+    // Tijdens het examen geen assistent (zie assistant.js).
+    document.body.classList.toggle("in-exam", id === "quiz" && state.mode === "exam");
     document.querySelectorAll(".tabs a").forEach((a) => {
       const active = a.dataset.view === id;
       a.classList.toggle("active", active);
