@@ -19,6 +19,7 @@ const QUESTIONS = [
   {
     id: 1,
     topic: "Voorrang",
+    scene: { vehicles: [{ id: "J", kind: "car", from: "s", me: true }, { id: "A", kind: "car", from: "e", color: "red", name: "rode auto" }], alt: "Gelijkwaardig kruispunt. Jij komt van onder, een rode auto komt van rechts." },
     question: "Je nadert een kruispunt zonder verkeersborden, haaientanden of verkeerslichten. Een auto komt van rechts. Wie mag als eerste gaan?",
     options: ["Jij", "De auto van rechts", "Wie het eerst bij het kruispunt is"],
     answer: 1,
@@ -27,6 +28,7 @@ const QUESTIONS = [
   {
     id: 2,
     topic: "Voorrang",
+    scene: { tram: "ew", vehicles: [{ id: "J", kind: "car", from: "s", me: true }, { id: "T", kind: "tram", from: "w", name: "tram" }], alt: "Gelijkwaardig kruispunt met een trambaan. Jij komt van onder, de tram komt van links." },
     question: "Op een gelijkwaardig kruispunt nadert een tram van links. Wie gaat voor?",
     options: ["Jij, want je komt van rechts", "De tram", "Wie het eerst bij het kruispunt is"],
     answer: 1,
@@ -43,6 +45,7 @@ const QUESTIONS = [
   {
     id: 4,
     topic: "Voorrang",
+    scene: { unpaved: ["s"], vehicles: [{ id: "J", kind: "car", from: "s", me: true }, { id: "A", kind: "car", from: "w", color: "red", name: "rode auto" }], alt: "Jij komt van onder over een onverharde weg. Een rode auto komt van links over de verharde weg." },
     question: "Je rijdt over een onverharde weg en komt bij een verharde weg. Er staan geen borden. Wat geldt?",
     options: ["Rechts gaat voor", "Je verleent voorrang aan het verkeer op de verharde weg", "Het verkeer op de verharde weg moet jou voor laten gaan"],
     answer: 1,
@@ -127,6 +130,7 @@ const QUESTIONS = [
   {
     id: 14,
     topic: "Voorrang",
+    scene: { layout: "rotonde", haai: ["n", "e", "s", "w"], signs: { s: "D1" }, vehicles: [{ id: "J", kind: "car", from: "s", me: true }, { id: "A", kind: "car", ring: "w", color: "red", name: "rode auto" }], alt: "Rotonde met haaientanden bij alle toeritten. Jij komt van onder, een rode auto rijdt al op de rotonde." },
     question: "Bij de ingang van een rotonde liggen haaientanden. Wie heeft voorrang?",
     options: ["Jij, want je komt van rechts", "Het verkeer dat al op de rotonde rijdt", "Het grootste voertuig"],
     answer: 1,
@@ -135,6 +139,7 @@ const QUESTIONS = [
   {
     id: 15,
     topic: "Voorrang",
+    scene: { cyclepath: true, vehicles: [{ id: "J", kind: "car", from: "s", me: true, go: "right" }, { id: "F", kind: "bike", from: "s", color: "red", gap: -10, name: "fietser" }], alt: "Jij slaat rechtsaf. Rechts naast je rijdt een fietser rechtdoor op het fietspad." },
     question: "Je slaat rechtsaf. Op het fietspad naast je rijdt een fietser rechtdoor. Wie gaat voor?",
     options: ["Jij, want je zit op de rijbaan", "De fietser", "Wie het snelst rijdt"],
     answer: 1,
@@ -143,6 +148,7 @@ const QUESTIONS = [
   {
     id: 16,
     topic: "Voorrang",
+    scene: { vehicles: [{ id: "J", kind: "car", from: "s", me: true, go: "left" }, { id: "A", kind: "car", from: "n", color: "red", name: "rode auto" }], alt: "Jij slaat linksaf. Een tegenligger rijdt rechtdoor." },
     question: "Je wilt linksaf slaan. Een tegenligger rijdt rechtdoor. Wie gaat voor?",
     options: ["Jij", "De tegenligger", "Wie het eerst richting aangeeft"],
     answer: 1,
@@ -395,10 +401,11 @@ const QUESTIONS = [
   {
     id: 45,
     topic: "Stilstaan en parkeren",
-    question: "Hoe dicht bij een kruispunt mag je niet parkeren?",
-    options: ["Binnen 3 meter", "Binnen 5 meter", "Binnen 10 meter"],
-    answer: 1,
-    explanation: "Je mag niet parkeren binnen 5 meter van een kruispunt."
+    type: "number",
+    question: "Binnen hoeveel meter van een kruispunt mag je niet parkeren?",
+    answer: 5,
+    unit: "meter",
+    explanation: "Je mag niet parkeren op minder dan 5 meter van een kruispunt. Kort stilstaan om iemand te laten in- of uitstappen mag daar wel."
   },
   {
     id: 46,
@@ -751,6 +758,7 @@ const QUESTIONS = [
   {
     id: 85,
     topic: "Voorrang",
+    scene: { vehicles: [{ id: "J", kind: "car", from: "s", me: true, go: "left" }, { id: "A", kind: "car", from: "n", go: "right", color: "red", name: "rode auto" }], alt: "Jij slaat linksaf. De tegenligger slaat rechtsaf, dezelfde straat in." },
     question: "Je slaat linksaf. Een tegenligger slaat op hetzelfde kruispunt rechtsaf, dezelfde straat in. Wie gaat voor?",
     options: ["Jij, want je was er eerst", "De tegenligger die rechtsaf slaat", "Wie van rechts komt"],
     answer: 1,
@@ -759,6 +767,7 @@ const QUESTIONS = [
   {
     id: 86,
     topic: "Voorrang",
+    scene: { tram: "ns", vehicles: [{ id: "J", kind: "car", from: "s", me: true }, { id: "T", kind: "tram", from: "n", go: "left", name: "tram" }], alt: "Jij rijdt rechtdoor. Een tegemoetkomende tram slaat linksaf, voor je langs." },
     question: "Je rijdt rechtdoor. Een tegemoetkomende tram slaat voor je linksaf. Wie gaat voor?",
     options: ["Jij, want rechtdoor gaat voor", "De tram", "Wie het eerst bij het kruispunt is"],
     answer: 1,
@@ -795,6 +804,7 @@ const QUESTIONS = [
   {
     id: 90,
     topic: "Voorrang",
+    scene: { layout: "rotonde", vehicles: [{ id: "J", kind: "car", from: "s", me: true }, { id: "A", kind: "car", ring: "w", color: "red", name: "rode auto" }], alt: "Rotonde zonder haaientanden of borden. Jij komt van onder, een rode auto rijdt op de rotonde." },
     question: "Je nadert een rotonde. Er staan geen borden en er liggen geen haaientanden. Wie gaat voor?",
     options: ["Het verkeer op de rotonde", "Het verkeer van rechts, dus jij als je de rotonde oprijdt", "Het grootste voertuig"],
     answer: 1,
@@ -995,10 +1005,10 @@ const QUESTIONS = [
   {
     id: 112,
     topic: "Stilstaan en parkeren",
-    question: "Bij een bushalte is geen geblokte markering. Binnen welke afstand van het haltebord mag je niet stilstaan?",
-    options: ["5 meter", "12 meter", "20 meter"],
-    answer: 1,
-    fixedOrder: true,
+    type: "number",
+    question: "Bij een bushalte is geen geblokte markering. Binnen hoeveel meter van het haltebord mag je niet stilstaan?",
+    answer: 12,
+    unit: "meter",
     explanation: "Zonder geblokte markering mag je binnen 12 meter van het haltebord niet stilstaan. Alleen om passagiers direct te laten in- of uitstappen mag het wel."
   },
   {
@@ -1233,5 +1243,127 @@ const QUESTIONS = [
     answer: 0,
     fixedOrder: true,
     explanation: "De fietser komt vlak voor je de rijbaan op. Rem om hem de ruimte te geven."
+  },
+  // --------------------------------------------- Tekeningen: wie gaat eerst?
+  {
+    id: 138,
+    topic: "Voorrang",
+    type: "tap",
+    scene: { haai: ["e", "w"], signs: { s: "B3" }, vehicles: [{ id: "J", kind: "car", from: "s", me: true }, { id: "A", kind: "car", from: "w", color: "red", name: "rode auto" }, { id: "B", kind: "car", from: "n", go: "left", color: "green", name: "groene auto" }], alt: "Kruispunt met haaientanden op de wegen van links en rechts. Jij komt van onder en rijdt rechtdoor. De rode auto komt van links. De groene auto komt je tegemoet en slaat linksaf." },
+    question: "Wie mag als eerste rijden?",
+    answer: "J",
+    explanation: "De rode auto heeft haaientanden en laat iedereen voorgaan. De groene auto slaat linksaf en laat jou als tegemoetkomend rechtdoorgaand verkeer voorgaan. Jij mag dus als eerste."
+  },
+  {
+    id: 139,
+    topic: "Voorrang",
+    type: "tap",
+    scene: { vehicles: [{ id: "J", kind: "car", from: "s", me: true }, { id: "A", kind: "car", from: "w", color: "red", name: "rode auto" }], alt: "Gelijkwaardig kruispunt. Jij komt van onder. Een rode auto komt van links." },
+    question: "Op dit kruispunt staan geen borden en liggen geen haaientanden. Wie mag als eerste rijden?",
+    answer: "J",
+    explanation: "Voor de rode auto kom jij van rechts. Op een gelijkwaardig kruispunt gaat rechts voor, dus jij mag eerst."
+  },
+  {
+    id: 140,
+    topic: "Voorrang",
+    type: "tap",
+    scene: { vehicles: [{ id: "J", kind: "car", from: "s", me: true }, { id: "A", kind: "car", from: "e", color: "red", name: "rode auto" }, { id: "B", kind: "ambulance", from: "w", name: "ambulance" }], alt: "Kruispunt. Jij komt van onder. Een rode auto komt van rechts. Van links komt een ambulance met blauw zwaailicht en sirene." },
+    question: "De ambulance voert blauw zwaailicht en een sirene. Wie mag als eerste rijden?",
+    answer: "B",
+    explanation: "Een voertuig met blauw zwaailicht én sirene is een voorrangsvoertuig. Iedereen laat het voorgaan, ook als het van links komt."
+  },
+  {
+    id: 141,
+    topic: "Voorrang",
+    type: "order",
+    scene: { vehicles: [{ id: "J", kind: "car", from: "s", me: true }, { id: "A", kind: "car", from: "e", color: "red", name: "rode auto" }, { id: "B", kind: "car", from: "n", color: "green", name: "groene auto" }], alt: "Gelijkwaardig kruispunt. Jij komt van onder, de rode auto van rechts en de groene auto van boven. Iedereen rijdt rechtdoor." },
+    question: "In welke volgorde mogen jullie rijden?",
+    answer: ["B", "A", "J"],
+    explanation: "Rechts gaat voor. De groene auto heeft niemand van rechts en gaat eerst. Daarna de rode auto, die de groene liet gaan. Jij laat de rode auto van rechts voorgaan en rijdt als laatste."
+  },
+  {
+    id: 142,
+    topic: "Voorrang",
+    type: "order",
+    scene: { arms: ["n", "e", "s"], haai: ["e"], signs: { e: "B6" }, vehicles: [{ id: "J", kind: "car", from: "e", me: true, go: "left" }, { id: "A", kind: "car", from: "s", color: "red", name: "rode auto" }, { id: "B", kind: "car", from: "n", go: "left", color: "green", name: "groene auto" }], alt: "T-kruising. Jij komt van rechts uit de zijweg met haaientanden en slaat linksaf. De rode auto komt van onder en rijdt rechtdoor. De groene auto komt van boven en slaat linksaf, jouw zijweg in." },
+    question: "In welke volgorde mogen jullie rijden?",
+    answer: ["A", "B", "J"],
+    explanation: "Jij hebt haaientanden en laat iedereen op de doorgaande weg voorgaan. Van die twee gaat de rode auto eerst: de groene auto slaat linksaf en laat tegemoetkomend rechtdoorgaand verkeer voorgaan."
+  },
+  {
+    id: 143,
+    topic: "Voorrang",
+    type: "order",
+    scene: { tram: "ew", vehicles: [{ id: "J", kind: "car", from: "s", me: true }, { id: "A", kind: "car", from: "e", color: "red", name: "rode auto" }, { id: "T", kind: "tram", from: "w", name: "tram" }], alt: "Gelijkwaardig kruispunt met een trambaan van links naar rechts. Jij komt van onder, de rode auto van rechts en de tram van links. Iedereen rijdt rechtdoor." },
+    question: "In welke volgorde mogen jullie rijden?",
+    answer: ["T", "A", "J"],
+    explanation: "Op een gelijkwaardig kruispunt gaat de tram altijd voor, ook van links. Daarna geldt rechts gaat voor: de rode auto komt van jouw rechterkant en gaat voor jou."
+  },
+
+  // ---------------------------------------- Meerdere antwoorden goed
+  {
+    id: 144,
+    topic: "Stilstaan en parkeren",
+    type: "multi",
+    question: "Waar mag je niet parkeren?",
+    options: ["Binnen 5 meter van een kruispunt", "Voor een uitrit", "Langs een gele onderbroken streep", "Op een parkeerhaven langs de weg"],
+    answer: [0, 1, 2],
+    explanation: "Parkeren is verboden binnen 5 meter van een kruispunt, voor een in- of uitrit en langs een gele onderbroken streep. Een parkeerhaven is juist bedoeld om te parkeren."
+  },
+  {
+    id: 145,
+    topic: "Inhalen",
+    type: "multi",
+    question: "In welke situaties mag je rechts inhalen?",
+    options: ["In een file", "Vlak voor of op een rotonde", "Een tram", "Op een rustige autosnelweg als iemand links blijft rijden"],
+    answer: [0, 1, 2],
+    explanation: "Rechts inhalen mag in een file, vlak voor en op een rotonde, bij trams, en bij een auto die links voorsorteert. Op een rustige autosnelweg haal je links in."
+  },
+  {
+    id: 146,
+    topic: "Voorrang",
+    type: "multi",
+    question: "Wie moet je altijd voor laten gaan?",
+    options: ["Een ambulance met blauw zwaailicht en sirene", "Een blinde met een witte stok met rode ringen", "Een takelwagen met geel zwaailicht", "Een auto die groot licht voert"],
+    answer: [0, 1],
+    explanation: "Voorrangsvoertuigen (blauw licht én sirene) en blinden met een witte stok laat je altijd voorgaan. Geel zwaailicht en groot licht geven geen voorrang."
+  },
+  {
+    id: 147,
+    topic: "Autosnelweg",
+    type: "multi",
+    question: "Wat is verboden op een autosnelweg?",
+    options: ["Keren", "Achteruitrijden", "Stoppen op de rijbaan om iemand op te halen", "In een file rechts voorbij rijden"],
+    answer: [0, 1, 2],
+    explanation: "Op een autosnelweg zijn keren, achteruitrijden en stilstaan op de rijbaan verboden. In een file mag je wel rechts voorbij."
+  },
+
+  // ----------------------------------------------------- Getal invullen
+  {
+    id: 148,
+    topic: "Alcohol en afleiding",
+    type: "number",
+    question: "Je haalt op je 18e je eerste rijbewijs. Hoeveel jaar geldt voor jou de lagere alcohollimiet van 0,2 promille?",
+    answer: 5,
+    unit: "jaar",
+    explanation: "Je bent beginnend bestuurder tot 5 jaar na je eerste rijbewijs. Haalde je je eerste rijbewijs B op je 17e (2toDrive), dan is het ook 5 jaar."
+  },
+  {
+    id: 149,
+    topic: "Afstand en remmen",
+    type: "number",
+    question: "Je rijdt 90 km/u. Hoeveel meter leg je af in één seconde?",
+    answer: 25,
+    unit: "meter",
+    explanation: "Deel km/u door 3,6: 90 / 3,6 = 25 meter per seconde. In één seconde schrikken en reageren rijd je dus al 25 meter."
+  },
+  {
+    id: 150,
+    topic: "Gedrag en ongevallen",
+    type: "number",
+    question: "Je auto staat met pech op een plek waar naderend verkeer hem niet op tijd ziet, en je alarmlichten werken niet. Op ongeveer hoeveel meter van je auto zet je de gevarendriehoek?",
+    answer: 30,
+    unit: "meter",
+    explanation: "De gevarendriehoek zet je goed zichtbaar op ongeveer 30 meter van de auto, aan de kant van het verkeer dat gevaar loopt. Werken je alarmlichten, dan is de driehoek niet verplicht."
   }
 ];

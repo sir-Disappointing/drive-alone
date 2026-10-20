@@ -7,6 +7,8 @@ A free practice site for the Dutch CBR driving theory exam (car, category B). Th
 - **Examen simuleren:** 50 random questions, a 30-minute timer, and a pass at 44 correct, matching the CBR format since 7 April 2025. As in the real exam, you can go back and change answers (Vorige, the arrow keys, or the progress bar). There's no feedback until the end, and unanswered questions count as wrong.
 - **Oefenen:** practice by topic, with instant feedback and an explanation after each answer.
 - **Fouten herhalen:** repeats the questions you got wrong last time. A question drops off the list once you answer it correctly.
+- **Question types like the CBR exam:** single choice, multiple response ("meerdere antwoorden kunnen goed zijn"), typing a number, tapping the right vehicle in a drawing, and putting road users in the order they may go.
+- **Junction drawings:** priority questions show a top-down drawing (`scenes.js`) with cars, a tram, cyclists, an ambulance, haaientanden, signs and animated route arrows and indicators. Animations are switched off when the user prefers reduced motion.
 - **Leren:** a cheat sheet with the key numbers, plus rules, warnings ("Let op") and rules of thumb for each topic. It's searchable, and each topic links to practice for that topic.
 - **Borden:** all 172 signs from bijlage 1 of the RVV 1990, grouped by series, with search and an "exam-relevant only" filter. The 39 exam-relevant signs open with a plain explanation, "Let op" points and "Niet verwarren met" comparisons. Links like `#borden/B6` open a sign directly.
 - Progress is saved in the browser's `localStorage`, including a per-topic overview on the home page. Nothing leaves the device.
@@ -46,6 +48,30 @@ Add an object to `QUESTIONS` in `questions.js`:
 }
 ```
 
+Other types use `type`:
+
+```js
+{ type: "multi",  options: [...], answer: [0, 2] }            // several correct options
+{ type: "number", answer: 5, unit: "meter" }                  // type a number
+{ type: "tap",    scene: {...}, answer: "J" }                 // pick a vehicle in the drawing
+{ type: "order",  scene: {...}, answer: ["B", "A", "J"] }     // order in which they may go
+```
+
+A `scene` describes a junction seen from above. See the comment at the top of `scenes.js`; a short example:
+
+```js
+scene: {
+  haai: ["e", "w"],                       // haaientanden on the east and west roads
+  signs: { s: "B3" },
+  vehicles: [
+    { id: "J", kind: "car", from: "s", me: true },
+    { id: "A", kind: "car", from: "w", color: "red", name: "rode auto" },
+    { id: "B", kind: "car", from: "n", go: "left", color: "green", name: "groene auto" }
+  ],
+  alt: "Description for screen readers"
+}
+```
+
 Then run:
 
 ```sh
@@ -54,7 +80,7 @@ node tools/check-questions.js
 
 ## About the content
 
-The questions are original. They are not the official CBR questions, which are copyrighted, and the site is not affiliated with the CBR. The facts were checked against public sources (law-text quotes from the RVV 1990 and WVW 1994, Rijksoverheid, ANWB, Rijkswaterstaat, CROW). Rules the sources disagreed on were left out, for example overtaking at a crossing, holding a phone at a red light, and the beginner period after 2toDrive. Rules change, so check new questions against the current [RVV 1990](https://wetten.overheid.nl/BWBR0004825/) and [cbr.nl](https://www.cbr.nl).
+The questions are original. They are not the official CBR questions, which are copyrighted, and the site is not affiliated with the CBR. All questions, the Leren content and the sign explanations were checked against the law text in force (RVV 1990 as of 1 July 2026, WVW 1994, Reglement rijbewijzen, Regeling voertuigen), taken from the [@ribba/theorie-mcp](https://www.npmjs.com/package/@ribba/theorie-mcp) dataset. A few articles are empty in that dataset (15a, 61a, 75, 84, 85); for those, the facts were checked against public sources (law-text quotes from the RVV 1990 and WVW 1994, Rijksoverheid, ANWB, Rijkswaterstaat, CROW). Rules the sources disagreed on were left out, for example overtaking at a crossing, holding a phone at a red light, and the beginner period after 2toDrive. Rules change, so check new questions against the current [RVV 1990](https://wetten.overheid.nl/BWBR0004825/) and [cbr.nl](https://www.cbr.nl).
 
 The real exam tests hazard perception with short animations. Here those are text scenarios with the choices remmen, gas loslaten or niets.
 
