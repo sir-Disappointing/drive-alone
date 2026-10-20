@@ -38,7 +38,7 @@ const QUESTIONS = [
     question: "Je rijdt vanaf een parkeerterrein via een uitrit de weg op. Aan wie verleen je voorrang?",
     options: ["Alleen aan auto's van rechts", "Aan al het verkeer op de weg, ook voetgangers en fietsers", "Aan niemand, want je komt van rechts"],
     answer: 1,
-    explanation: "Wie een uitrit verlaat, verleent voorrang aan al het verkeer op de weg, inclusief voetgangers op de stoep en fietsers."
+    explanation: "Wie uit een uitrit de weg oprijdt, moet het overige verkeer voor laten gaan: auto's, fietsers en ook voetgangers op de stoep."
   },
   {
     id: 4,
@@ -94,18 +94,18 @@ const QUESTIONS = [
   {
     id: 10,
     topic: "Voorrang",
-    question: "Een voetganger met een witte stok wil oversteken op een plek zonder zebrapad. Wat doe je?",
+    question: "Een voetganger met een witte stok met rode ringen wil oversteken op een plek zonder zebrapad. Wat doe je?",
     options: ["Doorrijden, er is geen zebrapad", "De voetganger laten oversteken", "Claxonneren als waarschuwing"],
     answer: 1,
-    explanation: "Blinden met een witte stok laat je altijd voorgaan, overal en niet alleen bij een zebrapad. Dat geldt ook voor iedereen die zich moeilijk voortbeweegt."
+    explanation: "Blinden met een witte stok met één of meer rode ringen laat je altijd voorgaan, overal en niet alleen bij een zebrapad. Dat geldt ook voor iedereen die zich moeilijk voortbeweegt."
   },
   {
     id: 11,
     topic: "Voorrang",
-    question: "Binnen de bebouwde kom wil een lijnbus vertrekken vanaf een bushalte en geeft richting aan. Wat doe je?",
+    question: "Binnen de bebouwde kom wil een bus wegrijden van een bushalte en geeft richting aan. Wat doe je?",
     options: ["Doorrijden, jij rijdt op de rijbaan", "De bus laten vertrekken", "Snel inhalen voordat de bus wegrijdt"],
     answer: 1,
-    explanation: "Binnen de bebouwde kom laat je een lijnbus voorgaan die vanaf een halte wil vertrekken."
+    explanation: "Binnen de bebouwde kom geef je een bus die richting aangeeft de gelegenheid om van de halte weg te rijden."
   },
   {
     id: 12,
@@ -118,11 +118,11 @@ const QUESTIONS = [
   {
     id: 13,
     topic: "Voorrang",
-    question: "Mag je een begrafenisstoet onderbreken om een kruispunt over te steken?",
+    question: "Mag je een uitvaartstoet van auto's doorsnijden om een kruispunt over te steken?",
     options: ["Ja", "Nee"],
     answer: 1,
     fixedOrder: true,
-    explanation: "Een stoet, zoals een begrafenisstoet of een militaire colonne, mag je niet onderbreken."
+    explanation: "Een uitvaartstoet van motorvoertuigen en een militaire colonne mag je niet doorsnijden."
   },
   {
     id: 14,
@@ -178,9 +178,9 @@ const QUESTIONS = [
     id: 20,
     topic: "Verkeerstekens",
     question: "Een verkeerslicht knippert geel. Wat betekent dat?",
-    options: ["Je moet stoppen", "Het licht is buiten werking: let extra op en volg de borden en voorrangsregels", "Je hebt voorrang"],
+    options: ["Je moet stoppen", "Voorzichtig: er is een gevaarlijk punt, de borden en voorrangsregels gelden", "Je hebt voorrang"],
     answer: 1,
-    explanation: "Een geel knipperlicht betekent: pas op. De gewone voorrangsregels en de borden gelden dan."
+    explanation: "Een geel knipperlicht betekent: gevaarlijk punt, voorzichtigheid geboden. Je ziet het ook als verkeerslichten uit staan. De borden en de gewone voorrangsregels gelden dan."
   },
   {
     id: 21,
@@ -372,7 +372,7 @@ const QUESTIONS = [
     options: ["Ja", "Nee"],
     answer: 1,
     fixedOrder: true,
-    explanation: "Vlak voor en op een voetgangersoversteekplaats mag je geen motorvoertuigen inhalen. Een voetganger kan uit het zicht van de auto naast je oversteken."
+    explanation: "Vlak voor en op een voetgangersoversteekplaats mag je geen enkel voertuig inhalen, ook geen fiets. Een voetganger kan uit het zicht van het voertuig naast je oversteken."
   },
   {
     id: 43,
@@ -461,15 +461,15 @@ const QUESTIONS = [
   {
     id: 53,
     topic: "Verlichting",
-    question: "Je rijdt overdag een tunnel in. Welke verlichting gebruik je?",
+    question: "Je rijdt overdag een tunnel in. Welke verlichting gebruik je het best?",
     options: ["Geen", "Dimlicht", "Mistachterlicht"],
     answer: 1,
-    explanation: "In een tunnel moet je verlichting voeren, ook overdag. Gebruik dimlicht."
+    explanation: "Zet in een tunnel dimlicht aan, ook overdag. Je ziet dan beter en anderen zien jou, ook van achteren. Dagrijverlichting brandt vaak alleen voorin."
   },
   {
     id: 54,
     topic: "Verlichting",
-    question: "Mag je grootlicht gebruiken als je achter een andere auto rijdt?",
+    question: "Mag je grootlicht gebruiken als je op korte afstand achter een andere auto rijdt?",
     options: ["Ja", "Nee, dan verblind je de bestuurder via de spiegels"],
     answer: 1,
     fixedOrder: true,
@@ -781,7 +781,7 @@ const QUESTIONS = [
     options: ["Ja", "Nee, daarvoor zijn blauw licht én sirene nodig"],
     answer: 1,
     fixedOrder: true,
-    explanation: "Alleen met blauw zwaailicht én sirene (twee- of drietonige hoorn) is het een voorrangsvoertuig. Wees natuurlijk wel voorzichtig."
+    explanation: "Alleen met blauw zwaai-, flits- of knipperlicht én een tweetonige hoorn is het een voorrangsvoertuig. Wees natuurlijk wel voorzichtig."
   },
   {
     id: 89,
@@ -887,7 +887,7 @@ const QUESTIONS = [
     options: ["100 km/u", "70 km/u", "85 km/u"],
     answer: 1,
     fixedOrder: true,
-    explanation: "Een snelheid in een rode ring boven je rijstrook is de maximumsnelheid, ook als het bord langs de weg meer toestaat."
+    explanation: "Geven een bord en een matrixbord allebei een maximumsnelheid aan, dan geldt de laagste. Hier is dat 70 km/u."
   },
   {
     id: 101,
@@ -999,7 +999,7 @@ const QUESTIONS = [
     options: ["5 meter", "12 meter", "20 meter"],
     answer: 1,
     fixedOrder: true,
-    explanation: "Zonder geblokte markering mag je binnen 12 meter van het haltebord niet stilstaan."
+    explanation: "Zonder geblokte markering mag je binnen 12 meter van het haltebord niet stilstaan. Alleen om passagiers direct te laten in- of uitstappen mag het wel."
   },
   {
     id: 113,
@@ -1117,10 +1117,10 @@ const QUESTIONS = [
   {
     id: 125,
     topic: "Kinderen en gordels",
-    question: "Je neemt incidenteel en over een korte afstand een vriendje van je kind mee. Hij is 6 jaar en 1,20 meter. Je hebt geen extra zitje. Wat mag?",
-    options: ["Hij mag voorin met de gordel", "Hij mag achterin met de gewone gordel", "Hij mag niet mee"],
-    answer: 1,
-    explanation: "Kinderen vanaf 3 jaar en kleiner dan 1,35 meter mogen bij uitzondering, incidenteel en over korte afstand, achterin met de gewone gordel."
+    question: "Je vervoert drie kinderen van 5, 7 en 9 jaar, allemaal kleiner dan 1,35 meter, op de achterbank. Na twee kinderzitjes past er geen derde meer. Wat mag?",
+    options: ["Het derde kind mag achterin met de gewone gordel", "Het derde kind mag zonder gordel achterin", "Het derde kind moet voorin zonder zitje"],
+    answer: 0,
+    explanation: "Past er na twee kinderzitjes geen derde meer, dan mag een derde kind van 3 jaar of ouder achterin met de gewone autogordel."
   },
 
   // ------------------------------------ Rijbewijs en voertuig (aanvulling)
@@ -1185,7 +1185,7 @@ const QUESTIONS = [
     options: ["Eén", "Twee", "Drie"],
     answer: 1,
     fixedOrder: true,
-    explanation: "Fietsers mogen met zijn tweeën naast elkaar rijden, zolang ze geen gevaar of hinder veroorzaken."
+    explanation: "Fietsers mogen met zijn tweeën naast elkaar rijden, zolang ze geen gevaar of hinder veroorzaken. Voor snorfietsers geldt dat niet."
   },
   {
     id: 133,
@@ -1199,11 +1199,11 @@ const QUESTIONS = [
   {
     id: 134,
     topic: "Andere weggebruikers",
-    question: "Waar rijdt een bromfiets (45 km/u) binnen de bebouwde kom, als er geen borden staan?",
+    question: "Een bromfiets (45 km/u) nadert een weg met alleen een verplicht fietspad (bord G11), geen fiets/bromfietspad. Waar rijdt hij?",
     options: ["Op het fietspad", "Op de rijbaan", "Op de stoep"],
     answer: 1,
     fixedOrder: true,
-    explanation: "Binnen de bebouwde kom rijdt een bromfiets op de rijbaan, tenzij een bord iets anders aangeeft. Dat geldt al sinds 1999."
+    explanation: "Een bromfiets gebruikt het fiets/bromfietspad (bord G12a). Is dat er niet, dan rijdt hij op de rijbaan. Op een verplicht fietspad mag hij niet."
   },
   {
     id: 135,

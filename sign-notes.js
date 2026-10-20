@@ -37,7 +37,7 @@ const SIGN_NOTES = {
   A3: {
     short: "Maximumsnelheid op matrixbord",
     meaning: "Een snelheid in een rode ring boven je rijstrook is de maximumsnelheid voor die strook.",
-    tips: ["Dit gaat voor het bord langs de weg, ook als dat een hogere snelheid toestaat."],
+    tips: ["Geven een bord langs de weg en een matrixbord verschillende limieten, dan geldt de laagste."],
     exam: true,
   },
   A4: {
@@ -241,6 +241,7 @@ const SIGN_NOTES = {
     meaning: "Motorvoertuigen mogen elkaar hier niet inhalen.",
     tips: [
       "Een stilstaand voertuig voorbijrijden is passeren, geen inhalen. Dat mag wel, als het veilig kan.",
+      "Bromfietsen tellen in de verkeersregels niet als motorvoertuig. Een brommer of fietser mag je hier dus wel inhalen.",
       "Geldt tot het bord F2 (einde inhaalverbod).",
     ],
     confuse: [{ code: "F3", diff: "F3 (rode vrachtwagen) verbiedt alleen vrachtauto's om in te halen." }],
@@ -412,7 +413,7 @@ const SIGN_NOTES = {
   L3: {
     short: "Bushalte",
     meaning: "Hier is een bushalte.",
-    tips: ["Zonder geblokte markering mag je binnen 12 meter van het haltebord niet stilstaan."],
+    tips: ["Zonder geblokte markering mag je binnen 12 meter van het haltebord niet stilstaan. Passagiers direct laten in- of uitstappen mag wel."],
     exam: true,
   },
   L8: {
