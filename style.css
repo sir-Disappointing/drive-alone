@@ -350,6 +350,9 @@ select {
 .about summary { cursor: pointer; font-weight: 800; }
 .about p { color: var(--text-2); font-size: 0.95rem; }
 .about p:last-child { margin-bottom: 0; }
+.about ul { color: var(--text-2); font-size: 0.95rem; padding-left: 1.2em; }
+.about li { margin: 6px 0; }
+.about code { font-size: 0.85em; }
 
 /* ------------------------------------------------------------- leren */
 
@@ -869,6 +872,7 @@ body.in-exam .assistant-fab, body.in-exam .assistant { display: none !important;
 .assistant-head { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; padding: 16px 12px 12px 20px; border-bottom: 1px solid var(--line); }
 .assistant-head h2 { margin: 0; font-size: 1.05rem; font-weight: 800; }
 .assistant-head p { margin: 2px 0 0; font-size: 0.8rem; color: var(--muted); }
+.assistant-head a { color: inherit; text-decoration: underline; }
 
 .assistant-body { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
 

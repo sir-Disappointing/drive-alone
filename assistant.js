@@ -16,7 +16,7 @@
     "Wanneer mag ik rechts inhalen?",
   ];
 
-  const state = { open: false, busy: false, history: [], client: null, Anthropic: null };
+  const state = { open: false, busy: false, history: [], client: null, Anthropic: null, retrieve: null };
 
   const readKey = () => {
     try {
@@ -72,6 +72,7 @@
       <div>
         <h2>Vraag het de assistent</h2>
         <p>Antwoorden komen van Claude (AI) en kunnen fouten bevatten.</p>
+        <p>Je vraag gaat naar Anthropic. Typ geen persoonsgegevens. <a href="./#privacy" target="_blank" rel="noopener">Privacy</a></p>
       </div>
       <button class="icon-btn" type="button" data-action="close" aria-label="Sluiten"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </header>
@@ -193,7 +194,8 @@
       // De proxy zet de echte sleutel erbij; deze waarde wordt daar genegeerd.
       state.client = new state.Anthropic({ baseURL: config.proxyUrl, apiKey: "via-proxy", dangerouslyAllowBrowser: true, maxRetries: 1 });
     } else {
-      if (typeof ASSISTANT_CONTEXT === "undefined") await loadScript("assistant-context.js");
+      if (typeof ASSISTANT_KNOWLEDGE === "undefined") await loadScript("assistant-knowledge.js");
+      state.retrieve = await import("./assistant-retrieve.mjs");
       state.client = new state.Anthropic({ apiKey: sessionKey, dangerouslyAllowBrowser: true });
     }
     return state.client;
@@ -229,8 +231,11 @@
     try {
       const client = await getClient();
       const params = { model: MODEL, max_tokens: 2000, output_config: { effort: "low" }, messages };
-      // Met een eigen sleutel sturen we de leerstof zelf mee; de proxy doet dat aan zijn kant.
-      if (!viaProxy) params.system = [{ type: "text", text: ASSISTANT_CONTEXT, cache_control: { type: "ephemeral" } }];
+      // Met een eigen sleutel zoeken we de passende leerstof hier; de proxy doet dat aan zijn kant.
+      if (!viaProxy) {
+        params.system = state.retrieve.systemBlocks(ASSISTANT_KNOWLEDGE);
+        params.messages = state.retrieve.withSources(ASSISTANT_KNOWLEDGE, messages);
+      }
       const stream = client.messages.stream(params);
       stream.on("text", (delta) => {
         text += delta;

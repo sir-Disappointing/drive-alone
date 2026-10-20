@@ -129,6 +129,10 @@
       closeSign();
       renderMenu();
       show("menu");
+      if (page === "privacy") {
+        $("privacy").open = true;
+        $("privacy").scrollIntoView();
+      }
     }
   }
 

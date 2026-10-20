@@ -9,10 +9,10 @@ A free practice site for the Dutch CBR driving theory exam (car, category B). Th
 - **Fouten herhalen:** repeats the questions you got wrong last time. A question drops off the list once you answer it correctly.
 - **Question types like the CBR exam:** single choice, multiple response ("meerdere antwoorden kunnen goed zijn"), typing a number, tapping the right vehicle in a drawing, and putting road users in the order they may go.
 - **Junction drawings:** priority questions show a top-down drawing (`scenes.js`) with cars, a tram, cyclists, an ambulance, haaientanden, signs and animated route arrows and indicators. Animations are switched off when the user prefers reduced motion.
-- **Assistant ("Vraag het"):** a chat with Claude Haiku 5.5 that answers using the course material, the sign explanations and the law text (`assistant-context.js`, built with `tools/build-assistant-context.js`). It runs through a small Cloudflare Worker proxy with a rate limit (`worker/`), or with a visitor's own API key that stays in their browser. It's switched off during the exam simulation. The SDK (`vendor/anthropic-sdk.js`, MIT) and the law text only load when someone opens the assistant.
+- **Assistant ("Vraag het"):** a chat with Claude Haiku 5.5 that answers from the course material, the sign explanations and the law text. Not everything is sent with every question. A small fixed core (instructions, exam facts, cheat sheet, about 1k tokens) is the cached system prompt. A simple keyword search (`assistant-retrieve.mjs`) then picks the few law articles, rules and signs that match the question, usually around 500 tokens. The knowledge base (`assistant-knowledge.js`, 414 pieces) is built with `tools/build-assistant-knowledge.js`, and `tools/check-retrieval.mjs` checks that common questions find the right sources. The assistant runs through a small Cloudflare Worker proxy with a rate limit (`worker/`), or with a visitor's own API key that stays in their browser. It's switched off during the exam simulation. The SDK (`vendor/anthropic-sdk.js`, MIT) and the knowledge base only load when someone opens the assistant. The chat says that questions go to Anthropic, and the Privacy section on the home page (`#privacy`) explains what is sent where.
 - **Leren:** a cheat sheet with the key numbers, plus rules, warnings ("Let op") and rules of thumb for each topic. It's searchable, and each topic links to practice for that topic.
 - **Borden:** all 172 signs from bijlage 1 of the RVV 1990, grouped by series, with search and an "exam-relevant only" filter. The 39 exam-relevant signs open with a plain explanation, "Let op" points and "Niet verwarren met" comparisons. Links like `#borden/B6` open a sign directly.
-- Progress is saved in the browser's `localStorage`, including a per-topic overview on the home page. Nothing leaves the device.
+- Progress is saved in the browser's `localStorage`, including a per-topic overview on the home page. Nothing leaves the device unless you use the assistant.
 - Colours: blue is your selected answer, green is correct, red is wrong. Each also has a tick or cross icon, so it doesn't rely on colour alone.
 - Traffic signs are drawn as inline SVG. The Overpass font is self-hosted in `fonts/` (SIL Open Font License), so the site makes no requests to third parties.
 - Keyboard shortcuts (1–4 or A–D to answer, Enter for next), light and dark mode, and a mobile layout.
@@ -30,6 +30,10 @@ A free practice site for the Dutch CBR driving theory exam (car, category B). Th
 | `app.js` | Quiz logic, timer and progress storage |
 | `index.html`, `style.css`, `favicon.svg` | The page |
 | `tools/check-questions.js` | Validates the question bank |
+| `assistant.js`, `assistant-config.js` | The assistant panel and the proxy address |
+| `assistant-knowledge.js`, `assistant-retrieve.mjs` | Knowledge base and search for the assistant (generated / shared with `worker/`) |
+| `tools/build-assistant-knowledge.js`, `tools/check-retrieval.mjs` | Builds the knowledge base, checks the search |
+| `worker/` | Cloudflare Worker proxy, see `worker/README.md` |
 | `.nojekyll` | Tells GitHub Pages to serve the files without Jekyll |
 
 ## Adding questions

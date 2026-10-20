@@ -4,11 +4,12 @@
 // De Worker:
 //   - accepteert alleen verzoeken vanaf de eigen site (ALLOWED_ORIGINS),
 //   - beperkt het aantal vragen per bezoeker (LIMITER, op IP-adres),
-//   - neemt van de browser alleen het gesprek over: model, systeemprompt en lengte legt hij zelf vast,
+//   - neemt van de browser alleen het gesprek over: model, systeemprompt, bronnen en lengte legt hij zelf vast,
 //     zodat de proxy niet als gratis algemene Claude-toegang te misbruiken is,
 //   - zet de API-sleutel er zelf bij (geheim ANTHROPIC_API_KEY).
 import Anthropic from "@anthropic-ai/sdk";
-import CONTEXT from "./context.js";
+import KNOWLEDGE from "./knowledge.js";
+import { systemBlocks, withSources } from "./retrieve.js";
 
 const MODEL = "claude-haiku-5-5";
 const MAX_TOKENS = 2000;
@@ -76,13 +77,13 @@ export default {
 
     const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
     try {
-      // De systeemprompt (wetteksten en leerstof) is elke keer gelijk en wordt dus gecachet.
+      // Vaste kern als systeemprompt (gecachet); bij de vraag alleen de passende stukken wet en leerstof.
       const upstream = await client.messages
         .create({
           model: MODEL,
           max_tokens: MAX_TOKENS,
-          system: [{ type: "text", text: CONTEXT, cache_control: { type: "ephemeral" } }],
-          messages,
+          system: systemBlocks(KNOWLEDGE),
+          messages: withSources(KNOWLEDGE, messages),
           output_config: { effort: "low" },
           stream: true,
         })
