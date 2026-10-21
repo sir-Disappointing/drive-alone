@@ -19,6 +19,7 @@ const QUESTIONS = [
   {
     id: 1,
     topic: "Voorrang",
+    scene: { vehicles: [{ id: "J", kind: "car", from: "s", me: true }, { id: "A", kind: "car", from: "e", color: "red", name: "rode auto" }], alt: "Gelijkwaardig kruispunt. Jij komt van onder, een rode auto komt van rechts." },
     question: "Je nadert een kruispunt zonder verkeersborden, haaientanden of verkeerslichten. Een auto komt van rechts. Wie mag als eerste gaan?",
     options: ["Jij", "De auto van rechts", "Wie het eerst bij het kruispunt is"],
     answer: 1,
@@ -27,6 +28,7 @@ const QUESTIONS = [
   {
     id: 2,
     topic: "Voorrang",
+    scene: { tram: "ew", vehicles: [{ id: "J", kind: "car", from: "s", me: true }, { id: "T", kind: "tram", from: "w", name: "tram" }], alt: "Gelijkwaardig kruispunt met een trambaan. Jij komt van onder, de tram komt van links." },
     question: "Op een gelijkwaardig kruispunt nadert een tram van links. Wie gaat voor?",
     options: ["Jij, want je komt van rechts", "De tram", "Wie het eerst bij het kruispunt is"],
     answer: 1,
@@ -38,11 +40,12 @@ const QUESTIONS = [
     question: "Je rijdt vanaf een parkeerterrein via een uitrit de weg op. Aan wie verleen je voorrang?",
     options: ["Alleen aan auto's van rechts", "Aan al het verkeer op de weg, ook voetgangers en fietsers", "Aan niemand, want je komt van rechts"],
     answer: 1,
-    explanation: "Wie een uitrit verlaat, verleent voorrang aan al het verkeer op de weg, inclusief voetgangers op de stoep en fietsers."
+    explanation: "Wie uit een uitrit de weg oprijdt, moet het overige verkeer voor laten gaan: auto's, fietsers en ook voetgangers op de stoep."
   },
   {
     id: 4,
     topic: "Voorrang",
+    scene: { unpaved: ["s"], vehicles: [{ id: "J", kind: "car", from: "s", me: true }, { id: "A", kind: "car", from: "w", color: "red", name: "rode auto" }], alt: "Jij komt van onder over een onverharde weg. Een rode auto komt van links over de verharde weg." },
     question: "Je rijdt over een onverharde weg en komt bij een verharde weg. Er staan geen borden. Wat geldt?",
     options: ["Rechts gaat voor", "Je verleent voorrang aan het verkeer op de verharde weg", "Het verkeer op de verharde weg moet jou voor laten gaan"],
     answer: 1,
@@ -94,18 +97,18 @@ const QUESTIONS = [
   {
     id: 10,
     topic: "Voorrang",
-    question: "Een voetganger met een witte stok wil oversteken op een plek zonder zebrapad. Wat doe je?",
+    question: "Een voetganger met een witte stok met rode ringen wil oversteken op een plek zonder zebrapad. Wat doe je?",
     options: ["Doorrijden, er is geen zebrapad", "De voetganger laten oversteken", "Claxonneren als waarschuwing"],
     answer: 1,
-    explanation: "Blinden met een witte stok laat je altijd voorgaan, overal en niet alleen bij een zebrapad. Dat geldt ook voor iedereen die zich moeilijk voortbeweegt."
+    explanation: "Blinden met een witte stok met één of meer rode ringen laat je altijd voorgaan, overal en niet alleen bij een zebrapad. Dat geldt ook voor iedereen die zich moeilijk voortbeweegt."
   },
   {
     id: 11,
     topic: "Voorrang",
-    question: "Binnen de bebouwde kom wil een lijnbus vertrekken vanaf een bushalte en geeft richting aan. Wat doe je?",
+    question: "Binnen de bebouwde kom wil een bus wegrijden van een bushalte en geeft richting aan. Wat doe je?",
     options: ["Doorrijden, jij rijdt op de rijbaan", "De bus laten vertrekken", "Snel inhalen voordat de bus wegrijdt"],
     answer: 1,
-    explanation: "Binnen de bebouwde kom laat je een lijnbus voorgaan die vanaf een halte wil vertrekken."
+    explanation: "Binnen de bebouwde kom geef je een bus die richting aangeeft de gelegenheid om van de halte weg te rijden."
   },
   {
     id: 12,
@@ -118,15 +121,16 @@ const QUESTIONS = [
   {
     id: 13,
     topic: "Voorrang",
-    question: "Mag je een begrafenisstoet onderbreken om een kruispunt over te steken?",
+    question: "Mag je een uitvaartstoet van auto's doorsnijden om een kruispunt over te steken?",
     options: ["Ja", "Nee"],
     answer: 1,
     fixedOrder: true,
-    explanation: "Een stoet, zoals een begrafenisstoet of een militaire colonne, mag je niet onderbreken."
+    explanation: "Een uitvaartstoet van motorvoertuigen en een militaire colonne mag je niet doorsnijden."
   },
   {
     id: 14,
     topic: "Voorrang",
+    scene: { layout: "rotonde", haai: ["n", "e", "s", "w"], signs: { s: "D1" }, vehicles: [{ id: "J", kind: "car", from: "s", me: true }, { id: "A", kind: "car", ring: "w", color: "red", name: "rode auto" }], alt: "Rotonde met haaientanden bij alle toeritten. Jij komt van onder, een rode auto rijdt al op de rotonde." },
     question: "Bij de ingang van een rotonde liggen haaientanden. Wie heeft voorrang?",
     options: ["Jij, want je komt van rechts", "Het verkeer dat al op de rotonde rijdt", "Het grootste voertuig"],
     answer: 1,
@@ -135,6 +139,7 @@ const QUESTIONS = [
   {
     id: 15,
     topic: "Voorrang",
+    scene: { cyclepath: true, vehicles: [{ id: "J", kind: "car", from: "s", me: true, go: "right" }, { id: "F", kind: "bike", from: "s", color: "red", gap: -10, name: "fietser" }], alt: "Jij slaat rechtsaf. Rechts naast je rijdt een fietser rechtdoor op het fietspad." },
     question: "Je slaat rechtsaf. Op het fietspad naast je rijdt een fietser rechtdoor. Wie gaat voor?",
     options: ["Jij, want je zit op de rijbaan", "De fietser", "Wie het snelst rijdt"],
     answer: 1,
@@ -143,6 +148,7 @@ const QUESTIONS = [
   {
     id: 16,
     topic: "Voorrang",
+    scene: { vehicles: [{ id: "J", kind: "car", from: "s", me: true, go: "left" }, { id: "A", kind: "car", from: "n", color: "red", name: "rode auto" }], alt: "Jij slaat linksaf. Een tegenligger rijdt rechtdoor." },
     question: "Je wilt linksaf slaan. Een tegenligger rijdt rechtdoor. Wie gaat voor?",
     options: ["Jij", "De tegenligger", "Wie het eerst richting aangeeft"],
     answer: 1,
@@ -178,9 +184,9 @@ const QUESTIONS = [
     id: 20,
     topic: "Verkeerstekens",
     question: "Een verkeerslicht knippert geel. Wat betekent dat?",
-    options: ["Je moet stoppen", "Het licht is buiten werking: let extra op en volg de borden en voorrangsregels", "Je hebt voorrang"],
+    options: ["Je moet stoppen", "Voorzichtig: er is een gevaarlijk punt, de borden en voorrangsregels gelden", "Je hebt voorrang"],
     answer: 1,
-    explanation: "Een geel knipperlicht betekent: pas op. De gewone voorrangsregels en de borden gelden dan."
+    explanation: "Een geel knipperlicht betekent: gevaarlijk punt, voorzichtigheid geboden. Je ziet het ook als verkeerslichten uit staan. De borden en de gewone voorrangsregels gelden dan."
   },
   {
     id: 21,
@@ -372,7 +378,7 @@ const QUESTIONS = [
     options: ["Ja", "Nee"],
     answer: 1,
     fixedOrder: true,
-    explanation: "Vlak voor en op een voetgangersoversteekplaats mag je geen motorvoertuigen inhalen. Een voetganger kan uit het zicht van de auto naast je oversteken."
+    explanation: "Vlak voor en op een voetgangersoversteekplaats mag je geen enkel voertuig inhalen, ook geen fiets. Een voetganger kan uit het zicht van het voertuig naast je oversteken."
   },
   {
     id: 43,
@@ -395,10 +401,11 @@ const QUESTIONS = [
   {
     id: 45,
     topic: "Stilstaan en parkeren",
-    question: "Hoe dicht bij een kruispunt mag je niet parkeren?",
-    options: ["Binnen 3 meter", "Binnen 5 meter", "Binnen 10 meter"],
-    answer: 1,
-    explanation: "Je mag niet parkeren binnen 5 meter van een kruispunt."
+    type: "number",
+    question: "Binnen hoeveel meter van een kruispunt mag je niet parkeren?",
+    answer: 5,
+    unit: "meter",
+    explanation: "Je mag niet parkeren op minder dan 5 meter van een kruispunt. Kort stilstaan om iemand te laten in- of uitstappen mag daar wel."
   },
   {
     id: 46,
@@ -461,15 +468,15 @@ const QUESTIONS = [
   {
     id: 53,
     topic: "Verlichting",
-    question: "Je rijdt overdag een tunnel in. Welke verlichting gebruik je?",
+    question: "Je rijdt overdag een tunnel in. Welke verlichting gebruik je het best?",
     options: ["Geen", "Dimlicht", "Mistachterlicht"],
     answer: 1,
-    explanation: "In een tunnel moet je verlichting voeren, ook overdag. Gebruik dimlicht."
+    explanation: "Zet in een tunnel dimlicht aan, ook overdag. Je ziet dan beter en anderen zien jou, ook van achteren. Dagrijverlichting brandt vaak alleen voorin."
   },
   {
     id: 54,
     topic: "Verlichting",
-    question: "Mag je grootlicht gebruiken als je achter een andere auto rijdt?",
+    question: "Mag je grootlicht gebruiken als je op korte afstand achter een andere auto rijdt?",
     options: ["Ja", "Nee, dan verblind je de bestuurder via de spiegels"],
     answer: 1,
     fixedOrder: true,
@@ -751,6 +758,7 @@ const QUESTIONS = [
   {
     id: 85,
     topic: "Voorrang",
+    scene: { vehicles: [{ id: "J", kind: "car", from: "s", me: true, go: "left" }, { id: "A", kind: "car", from: "n", go: "right", color: "red", name: "rode auto" }], alt: "Jij slaat linksaf. De tegenligger slaat rechtsaf, dezelfde straat in." },
     question: "Je slaat linksaf. Een tegenligger slaat op hetzelfde kruispunt rechtsaf, dezelfde straat in. Wie gaat voor?",
     options: ["Jij, want je was er eerst", "De tegenligger die rechtsaf slaat", "Wie van rechts komt"],
     answer: 1,
@@ -759,6 +767,7 @@ const QUESTIONS = [
   {
     id: 86,
     topic: "Voorrang",
+    scene: { tram: "ns", vehicles: [{ id: "J", kind: "car", from: "s", me: true }, { id: "T", kind: "tram", from: "n", go: "left", name: "tram" }], alt: "Jij rijdt rechtdoor. Een tegemoetkomende tram slaat linksaf, voor je langs." },
     question: "Je rijdt rechtdoor. Een tegemoetkomende tram slaat voor je linksaf. Wie gaat voor?",
     options: ["Jij, want rechtdoor gaat voor", "De tram", "Wie het eerst bij het kruispunt is"],
     answer: 1,
@@ -781,7 +790,7 @@ const QUESTIONS = [
     options: ["Ja", "Nee, daarvoor zijn blauw licht én sirene nodig"],
     answer: 1,
     fixedOrder: true,
-    explanation: "Alleen met blauw zwaailicht én sirene (twee- of drietonige hoorn) is het een voorrangsvoertuig. Wees natuurlijk wel voorzichtig."
+    explanation: "Alleen met blauw zwaai-, flits- of knipperlicht én een tweetonige hoorn is het een voorrangsvoertuig. Wees natuurlijk wel voorzichtig."
   },
   {
     id: 89,
@@ -795,6 +804,7 @@ const QUESTIONS = [
   {
     id: 90,
     topic: "Voorrang",
+    scene: { layout: "rotonde", vehicles: [{ id: "J", kind: "car", from: "s", me: true }, { id: "A", kind: "car", ring: "w", color: "red", name: "rode auto" }], alt: "Rotonde zonder haaientanden of borden. Jij komt van onder, een rode auto rijdt op de rotonde." },
     question: "Je nadert een rotonde. Er staan geen borden en er liggen geen haaientanden. Wie gaat voor?",
     options: ["Het verkeer op de rotonde", "Het verkeer van rechts, dus jij als je de rotonde oprijdt", "Het grootste voertuig"],
     answer: 1,
@@ -887,7 +897,7 @@ const QUESTIONS = [
     options: ["100 km/u", "70 km/u", "85 km/u"],
     answer: 1,
     fixedOrder: true,
-    explanation: "Een snelheid in een rode ring boven je rijstrook is de maximumsnelheid, ook als het bord langs de weg meer toestaat."
+    explanation: "Geven een bord en een matrixbord allebei een maximumsnelheid aan, dan geldt de laagste. Hier is dat 70 km/u."
   },
   {
     id: 101,
@@ -995,11 +1005,11 @@ const QUESTIONS = [
   {
     id: 112,
     topic: "Stilstaan en parkeren",
-    question: "Bij een bushalte is geen geblokte markering. Binnen welke afstand van het haltebord mag je niet stilstaan?",
-    options: ["5 meter", "12 meter", "20 meter"],
-    answer: 1,
-    fixedOrder: true,
-    explanation: "Zonder geblokte markering mag je binnen 12 meter van het haltebord niet stilstaan."
+    type: "number",
+    question: "Bij een bushalte is geen geblokte markering. Binnen hoeveel meter van het haltebord mag je niet stilstaan?",
+    answer: 12,
+    unit: "meter",
+    explanation: "Zonder geblokte markering mag je binnen 12 meter van het haltebord niet stilstaan. Alleen om passagiers direct te laten in- of uitstappen mag het wel."
   },
   {
     id: 113,
@@ -1117,10 +1127,10 @@ const QUESTIONS = [
   {
     id: 125,
     topic: "Kinderen en gordels",
-    question: "Je neemt incidenteel en over een korte afstand een vriendje van je kind mee. Hij is 6 jaar en 1,20 meter. Je hebt geen extra zitje. Wat mag?",
-    options: ["Hij mag voorin met de gordel", "Hij mag achterin met de gewone gordel", "Hij mag niet mee"],
-    answer: 1,
-    explanation: "Kinderen vanaf 3 jaar en kleiner dan 1,35 meter mogen bij uitzondering, incidenteel en over korte afstand, achterin met de gewone gordel."
+    question: "Je vervoert drie kinderen van 5, 7 en 9 jaar, allemaal kleiner dan 1,35 meter, op de achterbank. Na twee kinderzitjes past er geen derde meer. Wat mag?",
+    options: ["Het derde kind mag achterin met de gewone gordel", "Het derde kind mag zonder gordel achterin", "Het derde kind moet voorin zonder zitje"],
+    answer: 0,
+    explanation: "Past er na twee kinderzitjes geen derde meer, dan mag een derde kind van 3 jaar of ouder achterin met de gewone autogordel."
   },
 
   // ------------------------------------ Rijbewijs en voertuig (aanvulling)
@@ -1185,7 +1195,7 @@ const QUESTIONS = [
     options: ["Eén", "Twee", "Drie"],
     answer: 1,
     fixedOrder: true,
-    explanation: "Fietsers mogen met zijn tweeën naast elkaar rijden, zolang ze geen gevaar of hinder veroorzaken."
+    explanation: "Fietsers mogen met zijn tweeën naast elkaar rijden, zolang ze geen gevaar of hinder veroorzaken. Voor snorfietsers geldt dat niet."
   },
   {
     id: 133,
@@ -1199,11 +1209,11 @@ const QUESTIONS = [
   {
     id: 134,
     topic: "Andere weggebruikers",
-    question: "Waar rijdt een bromfiets (45 km/u) binnen de bebouwde kom, als er geen borden staan?",
+    question: "Een bromfiets (45 km/u) nadert een weg met alleen een verplicht fietspad (bord G11), geen fiets/bromfietspad. Waar rijdt hij?",
     options: ["Op het fietspad", "Op de rijbaan", "Op de stoep"],
     answer: 1,
     fixedOrder: true,
-    explanation: "Binnen de bebouwde kom rijdt een bromfiets op de rijbaan, tenzij een bord iets anders aangeeft. Dat geldt al sinds 1999."
+    explanation: "Een bromfiets gebruikt het fiets/bromfietspad (bord G12a). Is dat er niet, dan rijdt hij op de rijbaan. Op een verplicht fietspad mag hij niet."
   },
   {
     id: 135,
@@ -1233,5 +1243,127 @@ const QUESTIONS = [
     answer: 0,
     fixedOrder: true,
     explanation: "De fietser komt vlak voor je de rijbaan op. Rem om hem de ruimte te geven."
+  },
+  // --------------------------------------------- Tekeningen: wie gaat eerst?
+  {
+    id: 138,
+    topic: "Voorrang",
+    type: "tap",
+    scene: { haai: ["e", "w"], signs: { s: "B3" }, vehicles: [{ id: "J", kind: "car", from: "s", me: true }, { id: "A", kind: "car", from: "w", color: "red", name: "rode auto" }, { id: "B", kind: "car", from: "n", go: "left", color: "green", name: "groene auto" }], alt: "Kruispunt met haaientanden op de wegen van links en rechts. Jij komt van onder en rijdt rechtdoor. De rode auto komt van links. De groene auto komt je tegemoet en slaat linksaf." },
+    question: "Wie mag als eerste rijden?",
+    answer: "J",
+    explanation: "De rode auto heeft haaientanden en laat iedereen voorgaan. De groene auto slaat linksaf en laat jou als tegemoetkomend rechtdoorgaand verkeer voorgaan. Jij mag dus als eerste."
+  },
+  {
+    id: 139,
+    topic: "Voorrang",
+    type: "tap",
+    scene: { vehicles: [{ id: "J", kind: "car", from: "s", me: true }, { id: "A", kind: "car", from: "w", color: "red", name: "rode auto" }], alt: "Gelijkwaardig kruispunt. Jij komt van onder. Een rode auto komt van links." },
+    question: "Op dit kruispunt staan geen borden en liggen geen haaientanden. Wie mag als eerste rijden?",
+    answer: "J",
+    explanation: "Voor de rode auto kom jij van rechts. Op een gelijkwaardig kruispunt gaat rechts voor, dus jij mag eerst."
+  },
+  {
+    id: 140,
+    topic: "Voorrang",
+    type: "tap",
+    scene: { vehicles: [{ id: "J", kind: "car", from: "s", me: true }, { id: "A", kind: "car", from: "e", color: "red", name: "rode auto" }, { id: "B", kind: "ambulance", from: "w", name: "ambulance" }], alt: "Kruispunt. Jij komt van onder. Een rode auto komt van rechts. Van links komt een ambulance met blauw zwaailicht en sirene." },
+    question: "De ambulance voert blauw zwaailicht en een sirene. Wie mag als eerste rijden?",
+    answer: "B",
+    explanation: "Een voertuig met blauw zwaailicht én sirene is een voorrangsvoertuig. Iedereen laat het voorgaan, ook als het van links komt."
+  },
+  {
+    id: 141,
+    topic: "Voorrang",
+    type: "order",
+    scene: { vehicles: [{ id: "J", kind: "car", from: "s", me: true }, { id: "A", kind: "car", from: "e", color: "red", name: "rode auto" }, { id: "B", kind: "car", from: "n", color: "green", name: "groene auto" }], alt: "Gelijkwaardig kruispunt. Jij komt van onder, de rode auto van rechts en de groene auto van boven. Iedereen rijdt rechtdoor." },
+    question: "In welke volgorde mogen jullie rijden?",
+    answer: ["B", "A", "J"],
+    explanation: "Rechts gaat voor. De groene auto heeft niemand van rechts en gaat eerst. Daarna de rode auto, die de groene liet gaan. Jij laat de rode auto van rechts voorgaan en rijdt als laatste."
+  },
+  {
+    id: 142,
+    topic: "Voorrang",
+    type: "order",
+    scene: { arms: ["n", "e", "s"], haai: ["e"], signs: { e: "B6" }, vehicles: [{ id: "J", kind: "car", from: "e", me: true, go: "left" }, { id: "A", kind: "car", from: "s", color: "red", name: "rode auto" }, { id: "B", kind: "car", from: "n", go: "left", color: "green", name: "groene auto" }], alt: "T-kruising. Jij komt van rechts uit de zijweg met haaientanden en slaat linksaf. De rode auto komt van onder en rijdt rechtdoor. De groene auto komt van boven en slaat linksaf, jouw zijweg in." },
+    question: "In welke volgorde mogen jullie rijden?",
+    answer: ["A", "B", "J"],
+    explanation: "Jij hebt haaientanden en laat iedereen op de doorgaande weg voorgaan. Van die twee gaat de rode auto eerst: de groene auto slaat linksaf en laat tegemoetkomend rechtdoorgaand verkeer voorgaan."
+  },
+  {
+    id: 143,
+    topic: "Voorrang",
+    type: "order",
+    scene: { tram: "ew", vehicles: [{ id: "J", kind: "car", from: "s", me: true }, { id: "A", kind: "car", from: "e", color: "red", name: "rode auto" }, { id: "T", kind: "tram", from: "w", name: "tram" }], alt: "Gelijkwaardig kruispunt met een trambaan van links naar rechts. Jij komt van onder, de rode auto van rechts en de tram van links. Iedereen rijdt rechtdoor." },
+    question: "In welke volgorde mogen jullie rijden?",
+    answer: ["T", "A", "J"],
+    explanation: "Op een gelijkwaardig kruispunt gaat de tram altijd voor, ook van links. Daarna geldt rechts gaat voor: de rode auto komt van jouw rechterkant en gaat voor jou."
+  },
+
+  // ---------------------------------------- Meerdere antwoorden goed
+  {
+    id: 144,
+    topic: "Stilstaan en parkeren",
+    type: "multi",
+    question: "Waar mag je niet parkeren?",
+    options: ["Binnen 5 meter van een kruispunt", "Voor een uitrit", "Langs een gele onderbroken streep", "Op een parkeerhaven langs de weg"],
+    answer: [0, 1, 2],
+    explanation: "Parkeren is verboden binnen 5 meter van een kruispunt, voor een in- of uitrit en langs een gele onderbroken streep. Een parkeerhaven is juist bedoeld om te parkeren."
+  },
+  {
+    id: 145,
+    topic: "Inhalen",
+    type: "multi",
+    question: "In welke situaties mag je rechts inhalen?",
+    options: ["In een file", "Vlak voor of op een rotonde", "Een tram", "Op een rustige autosnelweg als iemand links blijft rijden"],
+    answer: [0, 1, 2],
+    explanation: "Rechts inhalen mag in een file, vlak voor en op een rotonde, bij trams, en bij een auto die links voorsorteert. Op een rustige autosnelweg haal je links in."
+  },
+  {
+    id: 146,
+    topic: "Voorrang",
+    type: "multi",
+    question: "Wie moet je altijd voor laten gaan?",
+    options: ["Een ambulance met blauw zwaailicht en sirene", "Een blinde met een witte stok met rode ringen", "Een takelwagen met geel zwaailicht", "Een auto die groot licht voert"],
+    answer: [0, 1],
+    explanation: "Voorrangsvoertuigen (blauw licht én sirene) en blinden met een witte stok laat je altijd voorgaan. Geel zwaailicht en groot licht geven geen voorrang."
+  },
+  {
+    id: 147,
+    topic: "Autosnelweg",
+    type: "multi",
+    question: "Wat is verboden op een autosnelweg?",
+    options: ["Keren", "Achteruitrijden", "Stoppen op de rijbaan om iemand op te halen", "In een file rechts voorbij rijden"],
+    answer: [0, 1, 2],
+    explanation: "Op een autosnelweg zijn keren, achteruitrijden en stilstaan op de rijbaan verboden. In een file mag je wel rechts voorbij."
+  },
+
+  // ----------------------------------------------------- Getal invullen
+  {
+    id: 148,
+    topic: "Alcohol en afleiding",
+    type: "number",
+    question: "Je haalt op je 18e je eerste rijbewijs. Hoeveel jaar geldt voor jou de lagere alcohollimiet van 0,2 promille?",
+    answer: 5,
+    unit: "jaar",
+    explanation: "Je bent beginnend bestuurder tot 5 jaar na je eerste rijbewijs. Haalde je je eerste rijbewijs B op je 17e (2toDrive), dan is het ook 5 jaar."
+  },
+  {
+    id: 149,
+    topic: "Afstand en remmen",
+    type: "number",
+    question: "Je rijdt 90 km/u. Hoeveel meter leg je af in één seconde?",
+    answer: 25,
+    unit: "meter",
+    explanation: "Deel km/u door 3,6: 90 / 3,6 = 25 meter per seconde. In één seconde schrikken en reageren rijd je dus al 25 meter."
+  },
+  {
+    id: 150,
+    topic: "Gedrag en ongevallen",
+    type: "number",
+    question: "Je auto staat met pech op een plek waar naderend verkeer hem niet op tijd ziet, en je alarmlichten werken niet. Op ongeveer hoeveel meter van je auto zet je de gevarendriehoek?",
+    answer: 30,
+    unit: "meter",
+    explanation: "De gevarendriehoek zet je goed zichtbaar op ongeveer 30 meter van de auto, aan de kant van het verkeer dat gevaar loopt. Werken je alarmlichten, dan is de driehoek niet verplicht."
   }
 ];

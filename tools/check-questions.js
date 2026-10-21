@@ -22,13 +22,32 @@ for (const q of QUESTIONS) {
   for (const field of ["topic", "question", "explanation"]) {
     if (typeof q[field] !== "string" || !q[field].trim()) problems.push(`${where}: ${field} ontbreekt`);
   }
-  if (!Array.isArray(q.options) || q.options.length < 2 || q.options.length > 4) {
-    problems.push(`${where}: options moet 2 tot 4 antwoorden hebben`);
-  } else {
-    if (new Set(q.options).size !== q.options.length) problems.push(`${where}: dubbele antwoorden`);
-    if (!Number.isInteger(q.answer) || q.answer < 0 || q.answer >= q.options.length) {
-      problems.push(`${where}: answer verwijst niet naar een bestaand antwoord`);
+  const type = q.type || "choice";
+  const vehicleIds = q.scene ? (q.scene.vehicles || []).map((v) => v.id) : [];
+  if (q.scene) {
+    if (new Set(vehicleIds).size !== vehicleIds.length) problems.push(`${where}: dubbele voertuig-id's in de tekening`);
+    if (!q.scene.alt) problems.push(`${where}: tekening mist een beschrijving (alt)`);
+  }
+  if (type === "choice" || type === "multi") {
+    if (!Array.isArray(q.options) || q.options.length < 2 || q.options.length > 4) {
+      problems.push(`${where}: options moet 2 tot 4 antwoorden hebben`);
+    } else {
+      if (new Set(q.options).size !== q.options.length) problems.push(`${where}: dubbele antwoorden`);
+      const answers = type === "multi" ? q.answer : [q.answer];
+      if (!Array.isArray(answers) || !answers.length || answers.some((a) => !Number.isInteger(a) || a < 0 || a >= q.options.length)) {
+        problems.push(`${where}: answer verwijst niet naar een bestaand antwoord`);
+      }
     }
+  } else if (type === "number") {
+    if (typeof q.answer !== "number") problems.push(`${where}: answer moet een getal zijn`);
+  } else if (type === "tap") {
+    if (!q.scene || !vehicleIds.includes(q.answer)) problems.push(`${where}: answer moet een voertuig uit de tekening zijn`);
+  } else if (type === "order") {
+    if (!q.scene || !Array.isArray(q.answer) || q.answer.length < 2 || q.answer.some((id) => !vehicleIds.includes(id)) || new Set(q.answer).size !== q.answer.length) {
+      problems.push(`${where}: answer moet een volgorde van voertuigen uit de tekening zijn`);
+    }
+  } else {
+    problems.push(`${where}: onbekend type "${type}"`);
   }
   if (q.sign && !signCodes.has(q.sign) && !SIGNS[q.sign]) problems.push(`${where}: onbekend bord "${q.sign}"`);
 }

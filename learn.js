@@ -138,7 +138,7 @@ const LEARN = {
         },
         {
           title: "Altijd voor laten gaan",
-          text: "Blinden met een witte stok en mensen die zich moeilijk voortbewegen, overal. Voetgangers die op een zebrapad oversteken of op het punt staan dat te doen.",
+          text: "Blinden met een witte stok met rode ringen en mensen die zich moeilijk voortbewegen, overal. Voetgangers die op een zebrapad oversteken of op het punt staan dat te doen.",
         },
         {
           title: "Bus binnen de bebouwde kom",
@@ -150,7 +150,7 @@ const LEARN = {
         },
         {
           title: "Stoeten",
-          text: "Een militaire colonne of een uitvaartstoet van motorvoertuigen mag je niet onderbreken.",
+          text: "Een militaire colonne of een uitvaartstoet van motorvoertuigen mag je niet doorsnijden.",
         },
       ],
       thumbs: [
@@ -181,7 +181,7 @@ const LEARN = {
         },
         {
           title: "Snelheid in een rode ring",
-          text: "Een snelheid boven je rijstrook is de maximumsnelheid, ook als het bord langs de weg meer toestaat.",
+          text: "Een snelheid in een rode ring boven je rijstrook is een maximumsnelheid. Geven een bord en een matrixbord verschillende limieten, dan geldt de laagste.",
         },
         {
           title: "Parkeerverbod en stopverbod",
@@ -263,7 +263,7 @@ const LEARN = {
         },
         {
           title: "Niet inhalen",
-          text: "Vlak voor of op een zebrapad, over een doorgetrokken streep, en wanneer je niet ver genoeg kunt zien om het veilig af te ronden.",
+          text: "Vlak voor of op een zebrapad (geen enkel voertuig, ook geen fiets), over een doorgetrokken streep, en wanneer je niet ver genoeg kunt zien om het veilig af te ronden.",
         },
         {
           title: "Eerst kijken",
@@ -284,7 +284,7 @@ const LEARN = {
         },
         {
           title: "Niet stilstaan",
-          text: "Op een kruispunt of overweg, op een fietsstrook, op een zebrapad of binnen 5 meter ervan, langs een gele doorgetrokken streep, in een tunnel, en bij een bushalte (blokmarkering, of anders binnen 12 meter van het bord).",
+          text: "Op een kruispunt of overweg, op een fietsstrook, op een oversteekplaats of binnen 5 meter ervan, langs een gele doorgetrokken streep, in een tunnel, en bij een bushalte (blokmarkering, of anders binnen 12 meter van het bord). Bij de bushalte mag je wel passagiers direct laten in- of uitstappen.",
         },
         {
           title: "Niet parkeren",
@@ -308,7 +308,7 @@ const LEARN = {
       rules: [
         {
           title: "Dimlicht",
-          text: "'s Nachts, en overdag als het zicht ernstig wordt belemmerd. Ook in een tunnel.",
+          text: "'s Nachts, en overdag als het zicht ernstig wordt belemmerd. In een tunnel is dimlicht ook verstandig.",
           warn: "Dagrijverlichting brandt vaak alleen voorin. Bij schemer of donker zet je dimlicht aan.",
         },
         {
@@ -386,7 +386,7 @@ const LEARN = {
       rules: [
         {
           title: "Alcohollimiet",
-          text: "Ervaren bestuurders 0,5 promille. Beginnende bestuurders (de eerste 5 jaar) 0,2 promille.",
+          text: "Ervaren bestuurders 0,5 promille. Beginnende bestuurders 0,2 promille: de eerste 5 jaar na je eerste rijbewijs, ook als je B via 2toDrive op je 17e haalde. Kreeg je voor je 18e een rijbewijs AM of T, dan 7 jaar.",
         },
         {
           title: "Telefoon",
@@ -418,7 +418,7 @@ const LEARN = {
         },
         {
           title: "Uitzondering",
-          text: "Incidenteel en over korte afstand mag een kind vanaf 3 jaar en kleiner dan 1,35 meter achterin met de gewone gordel.",
+          text: "Passen er na twee kinderzitjes geen drie op de achterbank, dan mag een derde kind van 3 jaar of ouder achterin met de gewone gordel. Zijn er geen gordels in de auto, dan geen kinderen onder 3 jaar, en kinderen onder 1,35 meter alleen achterin.",
         },
         {
           title: "Gordel",
@@ -472,11 +472,11 @@ const LEARN = {
       rules: [
         {
           title: "Fietsers",
-          text: "Fietsers mogen met zijn tweeën naast elkaar. Fietsers mogen andere bestuurders rechts inhalen.",
+          text: "Fietsers mogen met zijn tweeën naast elkaar (snorfietsers niet). Fietsers mogen andere bestuurders rechts inhalen.",
         },
         {
           title: "Bromfiets en speed pedelec",
-          text: "Een speed pedelec is een bromfiets. Binnen de bebouwde kom rijdt een bromfiets op de rijbaan, tenzij een bord anders aangeeft.",
+          text: "Een speed pedelec is een bromfiets. Een bromfiets gebruikt het fiets/bromfietspad, en anders de rijbaan. Op een verplicht fietspad mag hij niet.",
         },
         {
           title: "Voetgangers op een erf",

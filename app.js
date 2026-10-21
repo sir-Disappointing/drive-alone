@@ -74,10 +74,19 @@
   }
 
   // Husselt de antwoorden zodat de positie van het juiste antwoord varieert.
+  // Bij tapvragen worden de antwoorden de voertuigen uit de tekening.
   function prepare(q) {
-    if (q.fixedOrder) return q;
+    const type = q.type || "choice";
+    if (type === "tap") {
+      const ids = q.scene.vehicles.map((v) => v.id);
+      const label = (v) => (v.me ? "Jij" : v.name ? `${v.id} (${v.name})` : v.id);
+      return { ...q, optionIds: ids, options: q.scene.vehicles.map(label), answer: ids.indexOf(q.answer) };
+    }
+    if (type === "number" || type === "order" || q.fixedOrder) return q;
     const order = shuffle(q.options.map((_, i) => i));
-    return { ...q, options: order.map((i) => q.options[i]), answer: order.indexOf(q.answer) };
+    const options = order.map((i) => q.options[i]);
+    if (type === "multi") return { ...q, options, answer: q.answer.map((a) => order.indexOf(a)).sort() };
+    return { ...q, options, answer: order.indexOf(q.answer) };
   }
 
   function el(tag, className, text) {
@@ -90,6 +99,8 @@
   function show(id) {
     ["menu", "learn", "signs", "quiz", "result"].forEach((s) => $(s).classList.toggle("hidden", s !== id));
     $("site-head").classList.toggle("hidden", id === "quiz" || id === "result");
+    // Tijdens het examen geen assistent (zie assistant.js).
+    document.body.classList.toggle("in-exam", id === "quiz" && state.mode === "exam");
     document.querySelectorAll(".tabs a").forEach((a) => {
       const active = a.dataset.view === id;
       a.classList.toggle("active", active);
@@ -118,6 +129,10 @@
       closeSign();
       renderMenu();
       show("menu");
+      if (page === "privacy") {
+        $("privacy").open = true;
+        $("privacy").scrollIntoView();
+      }
     }
   }
 
@@ -196,6 +211,71 @@
     });
   }
 
+  // ------------------------------------------------------------ vraagtypen
+  // choice: één antwoord (standaard). multi: meerdere antwoorden kunnen goed zijn. number: getal invullen.
+  // tap: kies een voertuig in de tekening. order: zet de voertuigen in de volgorde waarin ze mogen rijden.
+
+  const HINTS = {
+    multi: "Meerdere antwoorden kunnen goed zijn.",
+    number: "Typ het getal.",
+    tap: "Tik op het voertuig in de tekening, of kies hieronder.",
+    order: "Tik de weggebruikers aan in de volgorde waarin ze mogen rijden.",
+  };
+
+  const typeOf = (q) => q.type || "choice";
+  // Bij oefenen worden choice- en tapvragen direct nagekeken; de rest na "Controleer".
+  const instant = (q) => typeOf(q) === "choice" || typeOf(q) === "tap";
+
+  function vehicleLabel(q, id) {
+    const v = q.scene && q.scene.vehicles.find((x) => x.id === id);
+    if (!v) return id;
+    if (v.me) return "Jij";
+    return v.name ? `${v.id} (${v.name})` : v.id;
+  }
+
+  const orderIds = (q) => q.scene.vehicles.map((v) => v.id).filter((id) => q.answer.includes(id));
+
+  function answered(q, pick) {
+    if (pick === null || pick === undefined) return false;
+    switch (typeOf(q)) {
+      case "multi":
+        return pick.length > 0;
+      case "number":
+        return pick !== "" && !Number.isNaN(Number(String(pick).replace(",", ".")));
+      case "order":
+        return pick.length === q.answer.length;
+      default:
+        return true;
+    }
+  }
+
+  function isCorrect(q, pick) {
+    if (!answered(q, pick)) return false;
+    switch (typeOf(q)) {
+      case "multi":
+        return pick.length === q.answer.length && q.answer.every((i) => pick.includes(i));
+      case "number":
+        return Number(String(pick).replace(",", ".")) === q.answer;
+      case "order":
+        return pick.join() === q.answer.join();
+      default:
+        return pick === q.answer;
+    }
+  }
+
+  function answerText(q, pick) {
+    switch (typeOf(q)) {
+      case "multi":
+        return pick.map((i) => q.options[i]).join(", ");
+      case "number":
+        return `${pick}${q.unit ? " " + q.unit : ""}`;
+      case "order":
+        return pick.map((id) => vehicleLabel(q, id)).join(" → ");
+      default:
+        return q.options[pick];
+    }
+  }
+
   // ------------------------------------------------------------ quiz
 
   function start(mode) {
@@ -251,8 +331,8 @@
     state.queue.forEach((q, i) => {
       let cls = "";
       if (i === state.index) cls = "current";
-      else if (state.mode === "exam") cls = state.picks[i] !== null ? "given" : "";
-      else if (state.locked[i]) cls = state.picks[i] === q.answer ? "right" : "wrong";
+      else if (state.mode === "exam") cls = answered(q, state.picks[i]) ? "given" : "";
+      else if (state.locked[i]) cls = isCorrect(q, state.picks[i]) ? "right" : "wrong";
 
       if (state.mode === "exam") {
         const b = el("button", cls);
@@ -269,7 +349,7 @@
 
   function renderQuestion() {
     const q = state.queue[state.index];
-    const last = state.index === state.queue.length - 1;
+    const type = typeOf(q);
 
     $("qnum").innerHTML = `${state.index + 1} <small>/ ${state.queue.length}</small>`;
     $("topic").textContent = q.topic;
@@ -278,59 +358,192 @@
     sign.innerHTML = q.sign ? signMarkup(q.sign) : "";
     sign.classList.toggle("hidden", !sign.innerHTML);
 
+    const scene = $("scene");
+    scene.innerHTML = q.scene ? SCENES.render(q.scene) : "";
+    scene.classList.toggle("hidden", !q.scene);
+    const clickable = q.scene && (type === "tap" || type === "order");
+    scene.classList.toggle("clickable", Boolean(clickable));
+    if (clickable) {
+      scene.querySelectorAll(".scene-vehicle, .scene-label").forEach((g) =>
+        g.addEventListener("click", () => {
+          if (type === "tap") choose(q.optionIds.indexOf(g.dataset.id));
+          else addOrder(g.dataset.id);
+        })
+      );
+    }
+
     $("question").textContent = q.question;
+    $("qhint").textContent = HINTS[type] || "";
     $("feedback").classList.add("hidden");
     $("prev").disabled = state.index === 0;
-    $("next").textContent = last ? "Afronden" : "Volgende";
-    $("next").disabled = state.mode !== "exam" && !state.locked[state.index];
 
-    const wrap = $("options");
-    wrap.innerHTML = "";
-    q.options.forEach((text, i) => {
-      const b = el("button", "option");
-      b.type = "button";
-      b.append(el("span", "letter", LETTERS[i]), el("span", "text", text));
-      b.addEventListener("click", () => choose(i));
-      wrap.appendChild(b);
-    });
-
-    if (state.mode === "exam") paintSelection();
+    renderAnswerInput(q);
+    updateNext();
     renderSteps();
     $("question").focus({ preventScroll: true });
   }
 
-  function paintSelection() {
-    Array.from($("options").children).forEach((b, n) => b.classList.toggle("selected", n === state.picks[state.index]));
+  function renderAnswerInput(q) {
+    const type = typeOf(q);
+    const wrap = $("options");
+    wrap.innerHTML = "";
+    wrap.className = `options type-${type}`;
+
+    if (type === "number") {
+      const box = el("label", "number-input");
+      const input = el("input");
+      input.type = "text";
+      input.inputMode = "decimal";
+      input.id = "number-answer";
+      input.autocomplete = "off";
+      input.setAttribute("aria-label", "Je antwoord");
+      input.value = state.picks[state.index] === null ? "" : state.picks[state.index];
+      input.addEventListener("input", () => {
+        const v = input.value.trim();
+        state.picks[state.index] = v === "" ? null : v;
+        updateNext();
+        renderSteps();
+      });
+      box.appendChild(input);
+      if (q.unit) box.appendChild(el("span", "unit", q.unit));
+      wrap.appendChild(box);
+      return;
+    }
+
+    if (type === "order") {
+      const slots = el("div", "order-slots");
+      slots.id = "order-slots";
+      const chips = el("div", "order-chips");
+      orderIds(q).forEach((id) => {
+        const b = el("button", "order-chip", vehicleLabel(q, id));
+        b.type = "button";
+        b.dataset.id = id;
+        b.addEventListener("click", () => addOrder(id));
+        chips.appendChild(b);
+      });
+      const reset = el("button", "link order-reset", "Opnieuw kiezen");
+      reset.type = "button";
+      reset.id = "order-reset";
+      reset.addEventListener("click", resetOrder);
+      wrap.append(slots, chips, reset);
+      paintOrder();
+      return;
+    }
+
+    q.options.forEach((text, i) => {
+      const b = el("button", "option");
+      b.type = "button";
+      if (type === "multi") b.setAttribute("aria-pressed", "false");
+      b.append(el("span", "letter", LETTERS[i]), el("span", "text", text));
+      b.addEventListener("click", () => choose(i));
+      wrap.appendChild(b);
+    });
+    paintSelection();
   }
 
-  function choose(i) {
+  function paintSelection() {
     const q = state.queue[state.index];
-    if (i >= q.options.length || state.locked[state.index]) return;
-    state.picks[state.index] = i;
+    const pick = state.picks[state.index];
+    const multi = typeOf(q) === "multi";
+    $("options").querySelectorAll(".option").forEach((b, n) => {
+      const on = multi ? (pick || []).includes(n) : n === pick;
+      b.classList.toggle("selected", on);
+      if (multi) b.setAttribute("aria-pressed", String(on));
+    });
+    if (typeOf(q) === "tap") {
+      $("scene").querySelectorAll(".scene-label").forEach((l) =>
+        l.classList.toggle("is-picked", pick !== null && l.dataset.id === q.optionIds[pick])
+      );
+    }
+  }
 
+  function updateNext() {
+    const q = state.queue[state.index];
+    const i = state.index;
+    const btn = $("next");
+    if (state.mode !== "exam" && !state.locked[i] && !instant(q)) {
+      btn.textContent = "Controleer";
+      btn.disabled = !answered(q, state.picks[i]);
+      return;
+    }
+    btn.textContent = i === state.queue.length - 1 ? "Afronden" : "Volgende";
+    btn.disabled = state.mode !== "exam" && !state.locked[i];
+  }
+
+  function choose(n) {
+    const i = state.index;
+    const q = state.queue[i];
+    const type = typeOf(q);
+    if (state.locked[i] || n < 0 || n >= (q.options || []).length || type === "number" || type === "order") return;
+
+    if (type === "multi") {
+      const pick = state.picks[i] ? state.picks[i].slice() : [];
+      const at = pick.indexOf(n);
+      if (at >= 0) pick.splice(at, 1);
+      else pick.push(n);
+      state.picks[i] = pick.length ? pick.sort() : null;
+      paintSelection();
+      updateNext();
+      renderSteps();
+      return;
+    }
+
+    state.picks[i] = n;
     if (state.mode === "exam") {
       paintSelection();
       renderSteps();
       return;
     }
+    check();
+  }
 
-    // Oefenen: direct nakijken.
-    state.locked[state.index] = true;
-    const correct = i === q.answer;
-    record([{ id: q.id, correct }]);
+  function addOrder(id) {
+    const i = state.index;
+    const q = state.queue[i];
+    if (state.locked[i] || !q.answer.includes(id)) return;
+    const pick = state.picks[i] ? state.picks[i].slice() : [];
+    if (pick.includes(id) || pick.length >= q.answer.length) return;
+    pick.push(id);
+    state.picks[i] = pick;
+    paintOrder();
+    updateNext();
+    renderSteps();
+  }
 
-    Array.from($("options").children).forEach((b, n) => {
-      b.disabled = true;
-      if (n === q.answer) {
-        b.classList.add("correct");
-        b.insertAdjacentHTML("beforeend", ICON_CHECK);
-      } else if (n === i) {
-        b.classList.add("wrong");
-        b.insertAdjacentHTML("beforeend", ICON_CROSS);
-      } else {
-        b.classList.add("dim");
-      }
+  function resetOrder() {
+    if (state.locked[state.index]) return;
+    state.picks[state.index] = null;
+    paintOrder();
+    updateNext();
+    renderSteps();
+  }
+
+  function paintOrder() {
+    const i = state.index;
+    const q = state.queue[i];
+    const pick = state.picks[i] || [];
+    const slots = $("order-slots");
+    slots.innerHTML = "";
+    q.answer.forEach((_, n) => {
+      const slot = el("span", `order-slot${pick[n] ? " filled" : ""}`);
+      slot.append(el("small", null, String(n + 1)), document.createTextNode(pick[n] ? vehicleLabel(q, pick[n]) : ""));
+      slots.appendChild(slot);
     });
+    $("options").querySelectorAll(".order-chip").forEach((b) => (b.disabled = state.locked[i] || pick.includes(b.dataset.id)));
+    $("order-reset").disabled = state.locked[i] || !pick.length;
+    $("scene").querySelectorAll(".scene-label").forEach((l) => l.classList.toggle("is-picked", pick.includes(l.dataset.id)));
+  }
+
+  // Nakijken in de oefenmodus.
+  function check() {
+    const i = state.index;
+    const q = state.queue[i];
+    const pick = state.picks[i];
+    if (state.locked[i] || !answered(q, pick)) return;
+    state.locked[i] = true;
+    const correct = isCorrect(q, pick);
+    record([{ id: q.id, correct }]);
+    markAnswer(q, pick);
 
     const fb = $("feedback");
     fb.className = `feedback ${correct ? "ok" : "bad"}`;
@@ -338,11 +551,48 @@
     const title = el("div", "feedback-title");
     title.innerHTML = correct ? BADGE_OK : BADGE_BAD;
     title.appendChild(el("span", null, correct ? "Goed!" : "Fout"));
-    fb.append(title, el("p", null, q.explanation));
+    fb.appendChild(title);
+    if (!correct && !instant(q) && typeOf(q) !== "multi") {
+      fb.appendChild(el("p", "feedback-answer", `Juiste antwoord: ${answerText(q, q.answer)}`));
+    }
+    fb.appendChild(el("p", null, q.explanation));
 
-    $("next").disabled = false;
+    updateNext();
     renderSteps();
     $("next").focus({ preventScroll: true });
+  }
+
+  function markAnswer(q, pick) {
+    const type = typeOf(q);
+    if (type === "number") {
+      const input = $("number-answer");
+      input.disabled = true;
+      input.parentElement.classList.add(isCorrect(q, pick) ? "correct" : "wrong");
+      return;
+    }
+    if (type === "order") {
+      paintOrder();
+      $("order-slots").classList.add(isCorrect(q, pick) ? "correct" : "wrong");
+      return;
+    }
+    $("options").querySelectorAll(".option").forEach((b, n) => {
+      b.disabled = true;
+      b.classList.remove("selected");
+      const right = type === "multi" ? q.answer.includes(n) : n === q.answer;
+      const picked = type === "multi" ? pick.includes(n) : n === pick;
+      if (right) {
+        b.classList.add("correct");
+        b.insertAdjacentHTML("beforeend", ICON_CHECK);
+      } else if (picked) {
+        b.classList.add("wrong");
+        b.insertAdjacentHTML("beforeend", ICON_CROSS);
+      } else {
+        b.classList.add("dim");
+      }
+    });
+    if (type === "tap") {
+      $("scene").querySelectorAll(".scene-label").forEach((l) => l.classList.toggle("is-answer", l.dataset.id === q.optionIds[q.answer]));
+    }
   }
 
   function goTo(i) {
@@ -353,10 +603,12 @@
 
   function next() {
     if ($("next").disabled) return;
+    const q = state.queue[state.index];
+    if (state.mode !== "exam" && !state.locked[state.index] && !instant(q)) return check();
     if (state.index < state.queue.length - 1) return goTo(state.index + 1);
 
     if (state.mode === "exam") {
-      const open = state.picks.filter((p) => p === null).length;
+      const open = state.queue.filter((x, i) => !answered(x, state.picks[i])).length;
       if (open && !confirm(`Je hebt ${open} ${open === 1 ? "vraag" : "vragen"} nog niet beantwoord. Toch afronden?`)) return;
     }
     finish(false);
@@ -368,7 +620,7 @@
         ? "Weet je zeker dat je het examen wilt stoppen? Je ziet dan de uitslag; onbeantwoorde vragen tellen als fout."
         : "Stoppen en je resultaat bekijken?";
     if (!confirm(msg)) return;
-    const anything = state.mode === "exam" ? state.picks.some((p) => p !== null) : state.locked.some(Boolean);
+    const anything = state.mode === "exam" ? state.queue.some((q, i) => answered(q, state.picks[i])) : state.locked.some(Boolean);
     if (anything) finish(false);
     else {
       clearInterval(state.timer);
@@ -385,7 +637,12 @@
 
     // Examen: alle vragen tellen, onbeantwoord is fout. Oefenen: alleen wat je hebt beantwoord.
     state.answers = state.queue
-      .map((q, i) => ({ q, chosen: state.picks[i], correct: state.picks[i] === q.answer, n: i + 1 }))
+      .map((q, i) => ({
+        q,
+        chosen: answered(q, state.picks[i]) ? state.picks[i] : null,
+        correct: isCorrect(q, state.picks[i]),
+        n: i + 1,
+      }))
       .filter((a, i) => exam || state.locked[i]);
     if (exam) record(state.answers.filter((a) => a.chosen !== null).map((a) => ({ id: a.q.id, correct: a.correct })));
 
@@ -433,9 +690,9 @@
       const body = el("div");
       body.appendChild(el("p", "review-q", `${a.n}. ${a.q.question}`));
       if (!a.correct) {
-        body.appendChild(el("p", "wrong-line", a.chosen === null ? "Niet beantwoord" : `Jouw antwoord: ${a.q.options[a.chosen]}`));
+        body.appendChild(el("p", "wrong-line", a.chosen === null ? "Niet beantwoord" : `Jouw antwoord: ${answerText(a.q, a.chosen)}`));
       }
-      body.appendChild(el("p", "right-line", `Juiste antwoord: ${a.q.options[a.q.answer]}`));
+      body.appendChild(el("p", "right-line", `Juiste antwoord: ${answerText(a.q, a.q.answer)}`));
       body.appendChild(el("p", "review-expl", a.q.explanation));
       item.append(icon, body);
       review.appendChild(item);
@@ -742,11 +999,24 @@
   function onKey(e) {
     if ($("quiz").classList.contains("hidden")) return;
     if (e.target.tagName === "SELECT" || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.target.tagName === "INPUT") {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        next();
+      }
+      return;
+    }
     const key = e.key.toUpperCase();
     const idx = "1234".includes(key) && key.length === 1 ? "1234".indexOf(key) : LETTERS.indexOf(key);
     if (idx >= 0) {
       e.preventDefault();
-      choose(idx);
+      const q = state.queue[state.index];
+      if (typeOf(q) === "order") {
+        const id = orderIds(q)[idx];
+        if (id) addOrder(id);
+      } else {
+        choose(idx);
+      }
     } else if (e.key === "Enter" && e.target.tagName !== "BUTTON") {
       e.preventDefault();
       next();

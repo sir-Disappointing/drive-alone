@@ -1,0 +1,16 @@
+name = "theorie-assistent"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+
+[vars]
+# Alleen deze websites mogen de proxy gebruiken (komma-gescheiden). Voeg je eigen domein toe als je dat later koppelt.
+ALLOWED_ORIGINS = "https://sir-disappointing.github.io"
+
+# Maximaal 10 vragen per minuut per bezoeker (IP-adres).
+[[ratelimits]]
+name = "LIMITER"
+namespace_id = "1001"
+
+  [ratelimits.simple]
+  limit = 10
+  period = 60
