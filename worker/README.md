@@ -8,6 +8,8 @@ The Worker:
 - allows at most 10 questions per minute per visitor (IP address);
 - takes only the conversation from the browser and sets everything else itself: the model (`claude-haiku-5-5`), the system prompt, the sources and the maximum answer length. The proxy can't be misused as a general-purpose Claude endpoint;
 - adds only the sources that match the question: a small cached core (about 1k tokens) plus a handful of law articles, rules and signs picked by `src/retrieve.js` (usually around 500 tokens), not the whole book;
+- caches the conversation: in a follow-up, everything up to the previous answer is marked for Anthropic's prompt cache, so earlier turns cost a tenth the second time;
+- caps answers at 800 tokens and asks Claude for short answers (output costs five times as much as input);
 - doesn't log or store the conversation. It only sees the IP address, for the rate limit;
 - streams the answer straight through to the browser.
 

@@ -230,7 +230,7 @@
     let text = "";
     try {
       const client = await getClient();
-      const params = { model: MODEL, max_tokens: 2000, output_config: { effort: "low" }, messages };
+      const params = { model: MODEL, max_tokens: 800, output_config: { effort: "low" }, messages };
       // Met een eigen sleutel zoeken we de passende leerstof hier; de proxy doet dat aan zijn kant.
       if (!viaProxy) {
         params.system = state.retrieve.systemBlocks(ASSISTANT_KNOWLEDGE);

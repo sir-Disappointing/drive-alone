@@ -220,6 +220,11 @@ export function systemBlocks(knowledge) {
 }
 
 // Zet de passende bronnen bij de laatste vraag. Eerdere vragen gaan zonder bronnen mee.
+//
+// Bij een vervolgvraag krijgt het vorige antwoord een cachemarkering. Alles tot en met dat antwoord
+// (kern plus eerdere vragen en antwoorden) is bij de volgende vraag precies hetzelfde en kost dan
+// nog maar een tiende. De laatste vraag zelf markeren heeft geen zin: die gaat de volgende keer
+// zonder bronnen mee en ziet er dan anders uit.
 export function withSources(knowledge, messages) {
   const users = messages.filter((m) => m.role === "user");
   const question = users[users.length - 1].content;
@@ -229,5 +234,10 @@ export function withSources(knowledge, messages) {
     ? sources.map((c) => `<bron titel="${c.title.replace(/"/g, "'")}">\n${c.text}\n</bron>`).join("\n")
     : "(geen passende bronnen gevonden)";
   const last = `<bronnen>\n${block}\n</bronnen>\n\n<vraag>\n${question}\n</vraag>`;
-  return messages.slice(0, -1).concat({ role: "user", content: last });
+  const out = messages.slice(0, -1).concat({ role: "user", content: last });
+  if (out.length >= 3) {
+    const prev = out[out.length - 2];
+    out[out.length - 2] = { role: prev.role, content: [{ type: "text", text: prev.content, cache_control: { type: "ephemeral" } }] };
+  }
+  return out;
 }

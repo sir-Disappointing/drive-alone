@@ -12,7 +12,7 @@ import KNOWLEDGE from "./knowledge.js";
 import { systemBlocks, withSources } from "./retrieve.js";
 
 const MODEL = "claude-haiku-5-5";
-const MAX_TOKENS = 2000;
+const MAX_TOKENS = 800;
 const MAX_MESSAGES = 12;
 const MAX_CHARS = 2000;
 
