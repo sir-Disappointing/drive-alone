@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Alleen scripts van deze site, en gegevens alleen naar Anthropic. Zet je proxyUrl in
-       assistant-config.js, voeg dat adres dan ook toe aan connect-src. -->
+       assistant/pocket-rag.config.json, voeg dat adres dan ook toe aan connect-src. -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.anthropic.com; object-src 'none'; base-uri 'self'; form-action 'self'">
   <title>Theorie Oefenen</title>
   <meta name="description" content="Gratis oefenen voor het CBR theorie-examen auto (B). Examensimulatie met 50 vragen, oefenen per onderwerp, je fouten herhalen en alle regels op een rij. Geen account, geen kosten.">
@@ -251,7 +251,6 @@
   <script src="scenes.js"></script>
   <script src="learn.js"></script>
   <script src="app.js"></script>
-  <script src="assistant-config.js"></script>
-  <script src="assistant.js"></script>
+  <script type="module" src="pocket-rag/widget.js"></script>
 </body>
 </html>
