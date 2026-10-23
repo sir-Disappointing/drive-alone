@@ -33,6 +33,12 @@ window.ASSISTANT_CONFIG = {
 };
 ```
 
+Also add the address to `connect-src` in the Content-Security-Policy `<meta>` tag at the top of `index.html`, otherwise the browser blocks the connection:
+
+```
+connect-src 'self' https://api.anthropic.com https://theorie-assistent.yourname.workers.dev
+```
+
 Commit and push that, and the assistant works for every visitor without their own key.
 
 ## Set a spending limit
