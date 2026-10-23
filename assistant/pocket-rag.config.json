@@ -1,0 +1,277 @@
+{
+  "name": "Theorie Oefenen",
+  "lang": "nl",
+  "instructions": "instructions.md",
+  "core": [
+    "core.md"
+  ],
+  "content": [
+    "content"
+  ],
+  "stopwords": [
+    "bord",
+    "borden",
+    "bordje"
+  ],
+  "synonyms": {
+    "stoplicht": [
+      "verkeerslicht"
+    ],
+    "stoplichten": [
+      "verkeerslicht"
+    ],
+    "snelweg": [
+      "autosnelweg"
+    ],
+    "zebra": [
+      "voetgangersoversteekplaats",
+      "zebrapad"
+    ],
+    "zebrapad": [
+      "voetgangersoversteekplaats"
+    ],
+    "oversteekplaats": [
+      "voetgangersoversteekplaats"
+    ],
+    "brommer": [
+      "bromfiets"
+    ],
+    "scooter": [
+      "bromfiets",
+      "snorfiets"
+    ],
+    "snorscooter": [
+      "snorfiets"
+    ],
+    "alcohol": [
+      "promille",
+      "alcoholhoudende"
+    ],
+    "drank": [
+      "alcohol",
+      "promille"
+    ],
+    "bier": [
+      "alcohol",
+      "promille"
+    ],
+    "biertje": [
+      "alcohol",
+      "promille"
+    ],
+    "drinken": [
+      "alcohol",
+      "promille"
+    ],
+    "telefoon": [
+      "mobiel"
+    ],
+    "mobiel": [
+      "telefoon"
+    ],
+    "bellen": [
+      "telefoon"
+    ],
+    "appen": [
+      "telefoon"
+    ],
+    "ambulance": [
+      "voorrangsvoertuig",
+      "zwaailicht",
+      "sirene"
+    ],
+    "politie": [
+      "voorrangsvoertuig",
+      "zwaailicht",
+      "verkeersregelaar"
+    ],
+    "brandweer": [
+      "voorrangsvoertuig",
+      "zwaailicht"
+    ],
+    "sirene": [
+      "voorrangsvoertuig",
+      "tweetonige"
+    ],
+    "zwaailicht": [
+      "voorrangsvoertuig"
+    ],
+    "agent": [
+      "verkeersregelaar",
+      "aanwijzingen"
+    ],
+    "trein": [
+      "overweg",
+      "spoorvoertuig"
+    ],
+    "spoor": [
+      "overweg"
+    ],
+    "spoorwegovergang": [
+      "overweg"
+    ],
+    "woonerf": [
+      "erf"
+    ],
+    "caravan": [
+      "aanhangwagen",
+      "aanhanger"
+    ],
+    "aanhanger": [
+      "aanhangwagen"
+    ],
+    "kind": [
+      "kinderbeveiligingssysteem",
+      "kinderzitje"
+    ],
+    "kinderen": [
+      "kinderbeveiligingssysteem",
+      "kinderzitje"
+    ],
+    "zitje": [
+      "kinderbeveiligingssysteem",
+      "kinderzitje"
+    ],
+    "gordel": [
+      "autogordel"
+    ],
+    "hard": [
+      "maximumsnelheid",
+      "snelheid"
+    ],
+    "kmh": [
+      "maximumsnelheid",
+      "snelheid"
+    ],
+    "snelheid": [
+      "maximumsnelheid"
+    ],
+    "stoppen": [
+      "stilstaan"
+    ],
+    "rechtsaf": [
+      "afslaan"
+    ],
+    "linksaf": [
+      "afslaan"
+    ],
+    "mistlamp": [
+      "mistachterlicht",
+      "mistlicht"
+    ],
+    "mistlampen": [
+      "mistachterlicht",
+      "mistlicht"
+    ],
+    "grootlicht": [
+      "groot licht"
+    ],
+    "koplampen": [
+      "dimlicht"
+    ],
+    "toeteren": [
+      "geluidssignalen"
+    ],
+    "claxon": [
+      "geluidssignalen"
+    ],
+    "toeter": [
+      "geluidssignalen"
+    ],
+    "bus": [
+      "autobus",
+      "bushalte"
+    ],
+    "halte": [
+      "bushalte"
+    ],
+    "file": [
+      "fileverkeer",
+      "files"
+    ],
+    "pech": [
+      "vluchtstrook",
+      "gevarendriehoek",
+      "waarschuwingslicht"
+    ],
+    "ongeluk": [
+      "ongeval",
+      "verkeersongeval"
+    ],
+    "aanrijding": [
+      "ongeval",
+      "verkeersongeval"
+    ],
+    "beginner": [
+      "beginnend",
+      "rijbewijs"
+    ],
+    "invoegen": [
+      "invoegstrook"
+    ],
+    "uitvoegen": [
+      "uitrijstrook"
+    ],
+    "wegwerkzaamheden": [
+      "werk in uitvoering"
+    ]
+  },
+  "phrases": {
+    "ga voor": [
+      "voorrang"
+    ],
+    "gaat voor": [
+      "voorrang"
+    ],
+    "gaan voor": [
+      "voorrang"
+    ],
+    "mag eerst": [
+      "voorrang"
+    ],
+    "mag er eerst": [
+      "voorrang"
+    ],
+    "mogen eerst": [
+      "voorrang"
+    ],
+    "mogen er eerst": [
+      "voorrang"
+    ],
+    "gaat eerst": [
+      "voorrang"
+    ],
+    "gaan eerst": [
+      "voorrang"
+    ],
+    "voor laten gaan": [
+      "voorrang"
+    ],
+    "voorgaan": [
+      "voorrang"
+    ],
+    "voor gaan": [
+      "voorrang"
+    ]
+  },
+  "tuning": {
+    "boost": {
+      "leren:": 1.25
+    }
+  },
+  "out": "../pocket-rag",
+  "worker": "../worker",
+  "proxyUrl": "",
+  "storageKey": "theorie-oefenen.anthropic-key",
+  "ui": {
+    "placeholder": "Stel een vraag over de theorie…",
+    "welcome": "Hoi! Stel me een vraag over verkeersregels, borden of het theorie-examen. Ik baseer me op de leerstof van deze site en de wettekst.",
+    "suggestions": [
+      "Wie heeft voorrang op een gelijkwaardig kruispunt?",
+      "Wat is het verschil tussen stilstaan en parkeren?",
+      "Wanneer mag ik rechts inhalen?"
+    ],
+    "privacyUrl": "./#privacy"
+  },
+  "checks": "checks.json"
+}
