@@ -5,7 +5,7 @@
 // - assistant/content/stukken.json:  wetsartikelen, leerstofregels en borden. Per vraag gaan alleen de best
 //                                    passende mee. Bordcodes en artikelnummers zijn sleutels ("B6", "art. 15").
 //
-// Daarna: npx github:sir-Disappointing/pocket-rag#v0.2.0 build assistant/pocket-rag.config.json
+// Daarna: npx github:sir-Disappointing/pocket-rag#v0.3.0 build assistant/pocket-rag.config.json
 // De instructies staan in assistant/instructions.md. De wetteksten hebben geen auteursrecht (Auteurswet art. 11).
 const fs = require("fs");
 const path = require("path");

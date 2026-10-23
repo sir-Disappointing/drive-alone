@@ -47,9 +47,12 @@ In the [Anthropic Console](https://console.anthropic.com) under Limits, set a mo
 
   ```sh
   node tools/build-assistant-knowledge.js <theorie-mcp-package>
-  npx github:sir-Disappointing/pocket-rag#v0.2.0 build assistant/pocket-rag.config.json
-  npx github:sir-Disappointing/pocket-rag#v0.2.0 check assistant/pocket-rag.config.json
+  npx github:sir-Disappointing/pocket-rag#v0.3.0 build assistant/pocket-rag.config.json
+  npx github:sir-Disappointing/pocket-rag#v0.3.0 check assistant/pocket-rag.config.json
+  npx github:sir-Disappointing/pocket-rag#v0.3.0 doctor --config assistant/pocket-rag.config.json
   ```
+
+  `check` explains any search miss and suggests a fix; `doctor` checks the whole setup (build, script tag, CSP, privacy link).
 
   The build updates `pocket-rag/` (the widget and its data) and the generated files in `worker/src/`. Then run `npx wrangler deploy` again.
 - **Settings and texts** (model, answer length, welcome text, synonyms): in `assistant/pocket-rag.config.json`. The instructions for Claude are in `assistant/instructions.md`.
