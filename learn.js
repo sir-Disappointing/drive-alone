@@ -398,7 +398,7 @@ const LEARN = {
         },
         {
           title: "Beginnersrijbewijs",
-          text: "In de eerste 5 jaar leiden 2 strafpunten voor ernstige overtredingen tot schorsing en een nieuw examen.",
+          text: "In de eerste 5 jaar leiden 2 strafpunten voor ernstige overtredingen tot schorsing en een onderzoek naar je rijvaardigheid door het CBR (theorie- en praktijktoets). Ben je niet rijvaardig, dan wordt je rijbewijs ongeldig en moet je opnieuw examen doen.",
         },
         {
           title: "Vermoeidheid",
