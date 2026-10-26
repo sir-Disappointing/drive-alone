@@ -1100,11 +1100,11 @@ const QUESTIONS = [
   {
     id: 122,
     topic: "Alcohol en afleiding",
-    question: "Je bent beginnend bestuurder. Hoeveel strafpunten leiden tot een melding bij het CBR en een nieuw rijexamen?",
+    question: "Je bent beginnend bestuurder. Hoeveel strafpunten leiden tot een melding bij het CBR en een onderzoek naar je rijvaardigheid?",
     options: ["1", "2", "3"],
     answer: 1,
     fixedOrder: true,
-    explanation: "Met het beginnersrijbewijs leiden 2 strafpunten voor ernstige overtredingen tot een onderzoek naar de rijvaardigheid. Je rijbewijs wordt dan geschorst."
+    explanation: "Met het beginnersrijbewijs leiden 2 strafpunten voor ernstige overtredingen tot een onderzoek naar de rijvaardigheid: een theorie- en praktijktoets bij het CBR, geen gewoon nieuw examen. Je rijbewijs wordt dan geschorst. Ben je niet rijvaardig, dan verklaart het CBR je rijbewijs ongeldig en moet je opnieuw examen doen."
   },
   {
     id: 123,
